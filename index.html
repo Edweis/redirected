@@ -2,8 +2,8 @@
   <head>
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
-  <body class="grid gap-8 px-2">
-    <h1 class="text-3xl">Redirect.me</h1>
+  <body class="grid gap-8 p-2 max-w-xl mx-auto ">
+    <h1 class="text-3xl border">Redirected.app</h1>
     <div>
       <p>1. Input your sub-domain</p>
       <p>2. Add redirects</p>
@@ -93,7 +93,7 @@
       Add a CNAME record to link from
       <pre id="instr-domain">link.domain.com</pre>
       to
-      <pre id="instr-to">link.domain.com.redirect.app</pre>
+      <pre>redirected.pages.dev</pre>
     </div>
 
     <script>
@@ -171,11 +171,8 @@
 
       // On domain blur
       function displayInstruction(domain) {
-        qEach(".pre-url", (e) => {
-          e.innerHTML = "https://" + domain + "/";
-        });
+        qEach(".pre-url", (e) => { e.innerHTML = "https://" + domain + "/" });
         q("#instr-domain").innerHTML = domain;
-        q("#instr-to").innerHTML = domain.replace(/\./g, "-") + ".redirect.app";
         q("#instr").style.display = "block";
       }
       if (form.domain) displayInstruction(form.domain);
