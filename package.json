@@ -8,5 +8,11 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "wrangler": "^3.5.0"
+  },
+  "dependencies": {
+    "yup": "^1.2.0"
+  }
 }

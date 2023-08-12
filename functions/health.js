@@ -1,7 +1,3 @@
-export function onRequest({request, functionPath}) {
-  return new Response(JSON.stringify({request, functionPath}), {
-    headers: {
-      body: JSON.stringify(request.json())
-    }
-  })
+export async function onRequest({request, env}) {
+  return new Response('I am good!', {status:200})
 }
