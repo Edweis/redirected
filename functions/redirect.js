@@ -1,5 +1,4 @@
-import * as yup from 'yup';
-
+ 
 const validate = (data) => {
   const from = new URL(data.from).toString()
   const to = new URL(data.to).toString()
@@ -8,7 +7,7 @@ const validate = (data) => {
 export async function onRequestPut({ request, env }) {
   try {
     const body = await request.json()
-    const { from, to } = await schema.validate(body)
+    const { from, to } = validate(body)
     const key = from.replace(/^https?:\/\//, '')
 
     console.log({ key, to })
