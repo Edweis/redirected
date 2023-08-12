@@ -9,29 +9,181 @@
       <p>2. Add redirects</p>
       <p>3. Connect domain</p>
     </div>
-    <form class="grid gap-4">
-      <label
-        >Sub-domain
-        <input class="border py-1 px-2 rounded block" required type="text" placeholder="link.domain.com" />
-      </label>
-      <label
-        >from
-        <input class="border py-1 px-2 rounded block" required type="text" placeholder="/path/from" />
-      </label>
-      <label
-        >to
-        <input class="border py-1 px-2 rounded block" required type="url" placeholder="https://..." />
-      </label>
+    <form class="grid gap-8">
+      <fieldset class="flex gap-4">
+        <label
+          >Subdomain
+          <input
+            class="border py-1 px-2 rounded disabled:bg-gray-300"
+            required
+            type="text"
+            placeholder="link.domain.com"
+            name="domain"
+            autofocus
+          />
+        </label>
+        <div>
+          <button
+            id="domain-continue"
+            class="border px-4 py-1 bg-orange-300 rounded disabled:opacity-70"
+          >
+            Continue
+          </button>
+        </div>
+      </fieldset>
+      <fieldset class="grid gap-4">
+        <table>
+          <tr>
+            <th></th>
+            <th class="text-left">From</th>
+            <th class="text-left">To URL</th>
+            <th></th>
+          </tr>
+          <tr id="form-row" class="group">
+            <td class="pre-url opacity-30 text-right">
+              https://link.domain.com/
+            </td>
+            <td>
+              <input
+                disabled
+                class="border py-1 px-2 rounded disabled:bg-gray-300"
+                required
+                type="text"
+                placeholder="events/meeting"
+                name="from"
+              />
+            </td>
+            <td>
+              <input
+                disabled
+                class="border py-1 px-2 rounded disabled:bg-gray-300"
+                required
+                type="url"
+                placeholder="https://..."
+                name="to"
+              />
+            </td>
+            <td class="group-last:hidden">
+              <a
+                class="underline"
+                href="#"
+                target="_blank"
+                >Open</a
+              >
+              <button
+                class="underline"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        </table>
+      </fieldset>
       <div>
-        <button type="submit" class="border px-4 py-1 bg-orange-300 rounded">Save</button>
+        <button
+          type="submit"
+          class="border px-4 py-1 bg-orange-300 rounded disabled:opacity-70"
+        >
+          Save
+        </button>
       </div>
     </form>
 
-    <div>
+    <div id="instr" style="display: none">
       Add a CNAME record to link from
-      <pre>link.domain.com</pre>
+      <pre id="instr-domain">link.domain.com</pre>
       to
-      <pre>link.domain.com.redirect.app</pre>
+      <pre id="instr-to">link.domain.com.redirect.app</pre>
     </div>
+
+    <script>
+      // constants
+      const IS_DEV = !window.location.host;
+      const API_BASE = IS_DEV ? "http://127.0.0.1:8788/api" : "/api";
+      const qEach = (query, fn) => document.querySelectorAll(query).forEach(fn);
+      const q = (query) => document.querySelector(query);
+
+      // input data
+      const form = {};
+      qEach("form input", (input) => {
+        form[input.name] = input.value;
+        input.addEventListener("change", (e) => {
+          form[e.target.name] = e.target.value;
+        });
+      });
+
+      // variables
+      let listRedirects = [];
+
+      // functions
+      function insertRedirect(from, to) {
+        const template = q("#form-row");
+        const nextLine = template.cloneNode(true);
+
+        nextLine.id = "";
+        nextLine.querySelector("input[name=from]").parentNode.innerHTML = from;
+        nextLine.querySelector("input[name=to]").parentNode.innerHTML = to;
+        nextLine.querySelector("a").href = 'https://'+form.domain+'/'+from
+        template.parentNode.insertBefore(nextLine, template);
+      }
+      function fetchRedirects(domain) {
+        const qs = new URLSearchParams({ domain: form.domain });
+        fetch(API_BASE + "/redirect?" + qs)
+          .then((r) => r.json())
+          .then((redirects) => {
+            const template = q("#form-row");
+            const nodes = (redirects || []).forEach((redirect) => {
+              const from = redirect.key.replace(form.domain + "/", "");
+              insertRedirect(from, redirect.value);
+            });
+          });
+      }
+
+      q("#domain-continue").addEventListener("click", (event) => {
+        event.preventDefault(); // avoid validating the form
+        const SUB_DOMAIN_REGEX =
+          /^(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,7}$/;
+        const isValid = SUB_DOMAIN_REGEX.test(form.domain);
+        const domainInput = q("input[name=domain]");
+        if (isValid) {
+          domainInput.disabled = true;
+          event.target.disabled = true;
+          q("input[name=from]").disabled = false;
+          q("input[name=to]").disabled = false;
+          q("input[name=from]").focus();
+          fetchRedirects(form.domain)
+        } else {
+          domainInput.setCustomValidity("Your subdomain is not right...");
+          domainInput.reportValidity();
+        }
+      });
+
+      // Create a redirect
+      q("form").addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const body = JSON.stringify(form);
+        await fetch(API_BASE + "/redirect", { method: "PUT", body });
+        insertRedirect(form.from,form.to);
+        q("input[name=from]").value = "";
+        q("input[name=to]").value = "";
+        q("input[name=from]").focus();
+      });
+
+      // On domain blur
+      function displayInstruction(domain) {
+        qEach(".pre-url", (e) => {
+          e.innerHTML = "https://" + domain + "/";
+        });
+        q("#instr-domain").innerHTML = domain;
+        q("#instr-to").innerHTML = domain.replace(/\./g, "-") + ".redirect.app";
+        q("#instr").style.display = "block";
+      }
+      if (form.domain) displayInstruction(form.domain);
+
+      q("form input[name=domain]").addEventListener(
+        "blur",
+        (event) => event.target.value && displayInstruction(event.target.value)
+      );
+    </script>
   </body>
 </html>
