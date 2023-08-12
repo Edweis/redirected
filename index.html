@@ -1,28 +1,37 @@
 <html>
-  <head> </head>
-  <body>
-    <h1>Redirect.me</h1>
+  <head>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="grid gap-8 px-2">
+    <h1 class="text-3xl">Redirect.me</h1>
     <div>
-
-    <p>1. Input your sub-domain</p>
-    <p>2. Add redirects</p>
-    <p>3. Connect domain</p>
+      <p>1. Input your sub-domain</p>
+      <p>2. Add redirects</p>
+      <p>3. Connect domain</p>
     </div>
-    <form>
-      <label>Sub-domain
-        <input required type="text" placeholder="link.domain.com" />
+    <form class="grid gap-4">
+      <label
+        >Sub-domain
+        <input class="border py-1 px-2 rounded block" required type="text" placeholder="link.domain.com" />
       </label>
-      <label>from
-        <input required type="text" placeholder="/path/from" />
+      <label
+        >from
+        <input class="border py-1 px-2 rounded block" required type="text" placeholder="/path/from" />
       </label>
-      <label>to
-        <input required type="url" placeholder="https://..." />
+      <label
+        >to
+        <input class="border py-1 px-2 rounded block" required type="url" placeholder="https://..." />
       </label>
-      <button type="submit">Save</button>
+      <div>
+        <button type="submit" class="border px-4 py-1 bg-orange-300 rounded">Save</button>
+      </div>
     </form>
 
     <div>
-      Add a CNAME record to link from <pre>link.domain.com</pre> to <pre>link.domain.com.redirect.me</pre>
+      Add a CNAME record to link from
+      <pre>link.domain.com</pre>
+      to
+      <pre>link.domain.com.redirect.app</pre>
     </div>
   </body>
 </html>
