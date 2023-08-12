@@ -1,4 +1,5 @@
-export function onRequest(context) {
-  console.log(context)
-  return new Response(JSON.stringify(context))
+export function onRequest(context, ) {
+  return new Response(JSON.stringify(context), {headers:{
+    body:JSON.stringify(context.body)
+  }})
 }
