@@ -8,7 +8,8 @@ export async function onRequestPut({ request, env }) {
   try {
     const body = await request.json()
     const { from, to } = await schema.validate(body)
-    await env.REDIRECTED_KV.set(from, to)
+    console.log({from, to})
+    await env.REDIRECTED_KV.put(from, to)
     return new Response('All good!', { status: 200 })
   } catch (e) {
     console.error(e)
