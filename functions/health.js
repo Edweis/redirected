@@ -1,7 +1,7 @@
-export function onRequest(context,) {
-  return new Response(JSON.stringify(context), {
+export function onRequest({request, functionPath}) {
+  return new Response(JSON.stringify({request, functionPath}), {
     headers: {
-      body: JSON.stringify(context.request.body)
+      body: JSON.stringify(request.body.json())
     }
   })
 }
