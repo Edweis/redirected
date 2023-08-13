@@ -1,0 +1,10 @@
+services:
+  redirected:
+    build: .
+    image: redirected
+    container_name: redirected
+    ports:
+      - "3000:80"
+      - "3001:443"
+    volumes:
+      - .:/app
