@@ -1,4 +1,4 @@
-import crypto from 'crypto-browserify';
+import crypto from 'crypto';
 import { PagesFunction } from '../lib/types';
  
 export const onRequestPost: PagesFunction = async ({ request, env }) => {

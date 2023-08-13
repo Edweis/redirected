@@ -1,42 +1,37 @@
 import * as yup from 'yup'
-import { PagesFunction } from '../lib/types'
-  
-const toUrl = (str:string) => {
-  try {
-    return new URL(str).toString()
-  } catch {
-    throw new Error(str + ' is not a valid URL.')
-  }
+import { Middleware } from '../lib/types.js'
+import { Redirect, RedirectNew, db } from '../lib/database.js'
+
+
+
+
+const schemaRedirectPut: yup.ObjectSchema<RedirectNew> = yup.object({
+  domain: yup.string().required(),
+  pathname: yup.string().matches(/^\/\w/).required(),
+  destination: yup.string().url().required()
+}).required()
+export const redirectPost: Middleware = async (ctx, next) => {
+  if (ctx.path !== '/redirects' || ctx.method !== 'POST') return next()
+  const { domain, pathname, destination } = schemaRedirectPut.validateSync(ctx.state.body)
+  await db.run(
+    `INSERT INTO redirects (domain,  pathname, destination, deletedAt) 
+      VALUES ($1, $2, $3, NULL)
+      ON CONFLICT(domain, pathname) DO UPDATE SET
+        destination = $3,
+        createdAt = datetime('now');`,
+    [domain, pathname, destination]
+  )
+  ctx.body = undefined
+  ctx.status = 201
 }
 
-const validate = (data) => {
-  const from = toUrl('https://' + data.domain + '/' + data.from)
-  const to = toUrl(data.to)
-  return { from, to }
-}
+export const redirectGet: Middleware = async (ctx, next) => {
+  const domain = /\/redirects\/([\w\.]+)/.exec(ctx.path)?.[1]
+  if (domain == null || ctx.method !== 'GET') return next()
 
-export const onRequestPut: PagesFunction = async ({ request, env }) => {
-  const body = await request.json()
-  const { from, to } = validate(body)
-  const key = from.replace(/^https?:\/\//, '')
-
-  console.log({ key, to })
-  await env.REDIRECTED_KV.put(key, to)
-
-  return new Response(null, { status: 200 })
-}
-
-export const onRequestGet: PagesFunction = async ({ request, env }) => {
-  const url = new URL(request.url);
-  const _domain = new URLSearchParams(url.search).get('domain')
-  const domain = yup.string().required().validateSync(_domain)
-
-
-  const prefix = domain + '/'
-  const response = await env.REDIRECTED_KV.list({ prefix })
-  const keys = await Promise.all(response.keys.map(async k => ({
-    key: k.name,
-    value: await env.REDIRECTED_KV.get(k.name)
-  })))
-  return new Response(JSON.stringify(keys), { status: 200 })
+  const redirects = await db.all<Redirect[]>(
+    `SELECT * FROM redirects WHERE domain = $1 AND deletedAt IS NULL`,
+    [domain]
+  )
+  ctx.body = redirects
 }
