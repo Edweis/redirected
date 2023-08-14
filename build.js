@@ -6,11 +6,9 @@ const isWatch = process.argv.includes('--watch');
 const NODE_ENV =  isWatch ? 'development' : 'production';
 const context = await esbuild.context({
   outdir: 'dist',
-  bundle: true,
   target: 'node18',
   platform: 'node',
   format: 'esm',
-  external: ['sqlite', 'sqlite3'], // Too hard to bunle, we install them on the server after the deployment
   entryPoints: ['src/index.ts',],
   loader: { '.html': 'text' }, // Copy the HTML file to the output
   banner: {
