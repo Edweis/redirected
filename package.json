@@ -5,9 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "build": "esbuild src/**/*.ts src/*.ts --outdir=dist --platform=node",
+    "build": "node ./build.js",
     "start:compile": "pnpm build --watch",
-    "start:watch:back": "nodemon ./dist/index.js",
+    "start:watch": "nodemon ./dist/index.js",
     "start": "concurrently  pnpm:start:*"
   },
   "keywords": [],
