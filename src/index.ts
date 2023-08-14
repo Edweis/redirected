@@ -12,7 +12,11 @@ const app = new koa();
 app.use(errorHandler);
 app.use(bodyParser);
 app.use(cors());
+import path from "path"
+import { fileURLToPath } from "url"
 
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 
 // HTML
@@ -26,8 +30,13 @@ app.use(async (ctx, next) => {
 app.use(async (ctx, next) => {
   const file = /^\/\.well-known\/(\w+)$/.exec(ctx.path)?.[1]
   if (file == null) return next()
-  console.log({ file })
-  ctx.body = fs.createReadStream('./src/.well-known/' + file);
+  
+  const wellKnownPath = path.join(__dirname, '../src/.well-known/'+file)
+  const exists = fs.existsSync(wellKnownPath)
+  if (exists) {
+    ctx.type = 'html';
+    ctx.body = fs.createReadStream(wellKnownPath);
+  }
 });
 
 // Api
@@ -38,7 +47,7 @@ app.use(redirectPost)
 const IS_PROD = process.env.NODE_ENV === 'production'
 const PORT = IS_PROD ? 80 : 3000
 http.createServer(app.callback()).listen(PORT);
-console.log('Listinging on port '+PORT)
+console.log('Listinging on port ' + PORT)
 // https.createServer({
 //   key: fs.readFileSync("./certs/dev-privatekey.pem"),
 //   cert: fs.readFileSync("./certs/dev-certificate.pem")
