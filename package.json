@@ -9,7 +9,8 @@
     "start:compile": "pnpm build --watch",
     "start:watch": "nodemon ./dist/index.js",
     "start": "concurrently  pnpm:start:*",
-    "deploy": "pnpm build && rsync -azPr --del . edweis@ssh.redirected.app:~/apps/redirected  --exclude=node_modules --exclude=\".*\""
+    "admin:start":"NODE_ENV=production pm2 start ./dist/index.js -i 3 --name redirected --time -o $HOME/.pm2/logs/redirected-logs.log -e $HOME/.pm2/logs/redirected-logs.log",
+    "deploy": "pnpm build && sh ./scripts/deploy.sh"
   },
   "keywords": [],
   "author": "",
