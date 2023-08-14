@@ -1,8 +1,7 @@
 echo "Deploying ..."
-pwd
 
 echo "🚀 Deploying: Copy files..."
-rsync -azPr --del . edweis@ssh.redirected.app:~/apps/redirected --exclude=node_modules --exclude=".*" 
+rsync -azr --del . edweis@ssh.redirected.app:~/apps/redirected --exclude=node_modules --exclude=".*" 
 
 echo "🚀 Deploying: Install packages..."
 ssh edweis@ssh.redirected.app "cd ~/apps/redirected ; pnpm install";
@@ -18,4 +17,5 @@ else
    ssh -q edweis@ssh.redirected.app "pm2 start ~/apps/redirected/dist/index.js --name redirected "
 fi
 sleep 3
+curl redirected.app/health
 

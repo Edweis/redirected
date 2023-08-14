@@ -5,11 +5,10 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "build": "node ./build.js",
+    "build": "node ./scripts/build.js",
     "start:compile": "pnpm build --watch",
     "start:watch": "nodemon ./dist/index.js",
     "start": "concurrently  pnpm:start:*",
-    "admin:start":"NODE_ENV=production pm2 start ./dist/index.js -i 3 --name redirected --time -o $HOME/.pm2/logs/redirected-logs.log -e $HOME/.pm2/logs/redirected-logs.log",
     "deploy": "pnpm build && sh ./scripts/deploy.sh"
   },
   "keywords": [],

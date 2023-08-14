@@ -3,23 +3,27 @@ import esbuild from 'esbuild';
 
 const isWatch = process.argv.includes('--watch');
 
-const NODE_ENV =  isWatch ? 'development' : 'production';
+const NODE_ENV = isWatch ? 'development' : 'production';
 const context = await esbuild.context({
   outdir: 'dist',
   target: 'node18',
   platform: 'node',
   format: 'esm',
-  entryPoints: ['src/index.ts',],
-  loader: { '.html': 'text' }, // Copy the HTML file to the output
+  entryPoints: ['src/**/*.ts', 'src/index.html'],
+  loader: { '.html': 'copy' }, // Copy the HTML file to the output
   banner: {
     // fix require import in ESM, @see https://github.com/evanw/esbuild/issues/1921#issuecomment-1403107887
     js: `import { createRequire } from 'module'; const require = createRequire(import.meta.url);`,
   },
-  define: { 'process.env.NODE_ENV': JSON.stringify(NODE_ENV) },
+  define: {
+    'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
+    'process.env.DEPLOYED_AT': JSON.stringify(new Date().toISOString())
+  },
 });
 
 if (isWatch) context.watch();
 else {
   await context.rebuild();
+  console.log('Built!')
   await context.dispose();
 }
