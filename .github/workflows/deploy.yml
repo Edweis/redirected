@@ -36,12 +36,12 @@ jobs:
     - name: Install dependencies
       run: pnpm install
     - name: Build
-      run: pnpm build ; ls -al
+      run: pnpm build ; ls -al dist
       
     - name: Send to server
       uses: easingthemes/ssh-deploy@main
       with:
-        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }} 
         ARGS: -rgoDzvc --copy-links --delete -i
         SOURCE: "dist/"
         REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
