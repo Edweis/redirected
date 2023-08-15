@@ -8,8 +8,9 @@ const __dirname = path.dirname(__filename)
 // HTML
 export const rootWebsite: Middleware = async (ctx, next) => {
   if (ctx.path !== '/') return next()
+  const pathName = path.join(__dirname, '/index.html')
   ctx.type = 'html';
-  ctx.body = fs.createReadStream('./src/index.html');
+  ctx.body = fs.createReadStream(pathName);
 }
 
 // Certificates

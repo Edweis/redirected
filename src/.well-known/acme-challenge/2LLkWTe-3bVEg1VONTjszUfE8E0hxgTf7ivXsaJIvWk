@@ -1,7 +1,14 @@
 That's a sample file to make sure that the challenge response work.
 
 As of this commit, I managed to create a cretificate by running:
-  sudo certbot certonly --webroot -w . -d redirected.app --test-cert -m francois@garnet.center
+```
+  cd  ~/apps/redirected/src/
+  sudo certbot certonly --webroot --agree-tos -n \
+    --webroot-path . -d redirected.app,link.redirected.app  \
+    -m francois@garnet.center --no-eff-email \
+  sudo chown -R edweis /etc/letsencrypt/
+  pm2 reload
+```
 at
   ~/apps/redirected/src/
 
