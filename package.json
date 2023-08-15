@@ -23,6 +23,7 @@
   "dependencies": {
     "@koa/cors": "^4.0.0",
     "co-body": "^6.1.0",
+    "devcert": "^1.2.2",
     "koa": "^2.14.2",
     "nodemon": "^3.0.1",
     "sqlite": "^5.0.1",

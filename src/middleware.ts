@@ -1,10 +1,9 @@
 import { ValidationError } from "yup";
-import { db, dbPromise } from "./lib/database.js";
+import { db } from "./lib/database.js";
 import { Middleware } from "./lib/types.js";
 import parse from 'co-body'
 
 export const initDb = async () => {
-  await dbPromise
   await db.exec(`CREATE TABLE IF NOT EXISTS redirects (
                   domain TEXT NOT NULL, 
                   pathname TEXT NOT NULL, 
