@@ -16,5 +16,6 @@ export const health: Middleware = async (ctx, next) => {
   if (ctx.path !== '/health') return next();
   const lastUpdate = new Date(process.env.DEPLOYED_AT).getTime()
   const diff = (new Date().getTime() - lastUpdate) / 1000
-  ctx.body = `🚀 All good bro 🚀 \nMy last build is ${formatSeconds(diff)} old`
+  console.log(process.cwd())
+  ctx.body = `💪 All good bro 💪 \nMy last build is ${formatSeconds(diff)} old`
 }
