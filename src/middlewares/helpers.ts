@@ -1,6 +1,6 @@
 import { ValidationError } from "yup";
-import { db } from "./lib/database.js";
-import { Middleware } from "./lib/types.js";
+import { db } from "../lib/database.js";
+import { Middleware } from "../lib/types.js";
 import parse from 'co-body'
 
 export const initDb = async () => {
@@ -36,4 +36,13 @@ export const bodyParser: Middleware = async (ctx, next) => {
     ctx.state = { body };
   }
   return next()
+}
+
+export const forceHttps: Middleware = async (ctx, next) => {
+  if (ctx.path.startsWith('/.weel-known/')) return next();
+  if (ctx.protocol === 'https') return next()
+  const nextUrl = new URL(ctx.URL);
+  nextUrl.protocol = 'https'
+  console.log('Redireting to ', nextUrl.toString())
+  return ctx.redirect(nextUrl.toString())
 }
