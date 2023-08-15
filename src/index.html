@@ -1,37 +1,32 @@
+<!DOCTYPE html>
 <html>
   <head>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="./styles.css" rel="stylesheet" />
   </head>
-  <body class="grid gap-8 p-2 max-w-xl mx-auto ">
-    <h1 class="text-3xl border">Redirected.app</h1>
-    <div>
-      <p>1. Input your sub-domain</p>
-      <p>2. Add redirects</p>
-      <p>3. Connect domain</p>
-    </div>
+  <body class="grid gap-8 p-2 max-w-2xl mx-auto">
+    <h1 class="text-5xl">Redirected.app</h1>
+    <p>Create a custom redirect in 2 minutes.</p>
+
     <form class="grid gap-8">
-      <fieldset class="flex gap-4">
-        <label
-          >Subdomain
+      <article class="flex items-center">
+        <div class="inline text-5xl font-mono mr-4">1</div>
+        <div class="text-3xl flex whitespace-nowrap items-center gap-2">
+          My subdomain is
           <input
-            class="border py-1 px-2 rounded disabled:bg-gray-300"
+            class="shrink py-1 px-2 disabled:bg-gray-300"
             required
             type="text"
             placeholder="link.domain.com"
             name="domain"
             autofocus
           />
-        </label>
-        <div>
-          <button
-            id="domain-continue"
-            class="border px-4 py-1 bg-orange-300 rounded disabled:opacity-70"
-          >
-            Continue
-          </button>
         </div>
-      </fieldset>
-      <fieldset class="grid gap-4">
+      </article>
+      <article class="flex items-center">
+        <div class="inline text-5xl font-mono mr-4">2</div>
+        <div class="text-3xl">I want to redirect:</div>
+      </article>
+      <article class="grid gap-4">
         <table>
           <tr>
             <th></th>
@@ -50,7 +45,7 @@
                 required
                 type="text"
                 placeholder="events/meeting"
-                name="from"
+                name="pathname"
               />
             </td>
             <td>
@@ -60,32 +55,42 @@
                 required
                 type="url"
                 placeholder="https://..."
-                name="to"
+                name="destination"
               />
             </td>
             <td class="group-last:hidden">
-              <a
-                class="underline"
-                href="#"
-                target="_blank"
-                >Open</a
-              >
-              <button
-                class="underline"
-              >
-                Delete
-              </button>
+              <a class="underline" href="#" target="_blank">Open</a>
+              <button class="underline">Delete</button>
             </td>
           </tr>
         </table>
-      </fieldset>
+        <div>
+          <button
+            id="add-redirect"
+            class="border px-4 py-1 bg-orange-300 rounded disabled:opacity-70"
+          >
+            Add redirect
+          </button>
+        </div>
+      </article>
+      <article class="flex items-center">
+        <div class="inline text-5xl font-mono mr-4">3</div>
+        <div class="text-3xl">I update my DNS</div>
+      </article>
+      <article id="instr" style="display: none">
+        Add a CNAME record to link from
+        <pre id="instr-domain" class="inline font-bold">link.domain.com</pre>
+        to
+        <pre class="inline font-bold">redirected.app</pre>
+      </article>
       <div>
         <button
-          type="submit"
+          id="check-dns"
           class="border px-4 py-1 bg-orange-300 rounded disabled:opacity-70"
         >
-          Save
+          Check the DNS
         </button>
+        <span id="dns-status"></span>
       </div>
     </form>
 
@@ -93,17 +98,17 @@
       Add a CNAME record to link from
       <pre id="instr-domain">link.domain.com</pre>
       to
-      <pre>redirected.pages.dev</pre>
+      <pre>redirected.app</pre>
     </div>
 
     <script>
       // constants
       const IS_DEV = !window.location.host;
-      const API_BASE = IS_DEV ? "http://127.0.0.1:8788/api" : "/api";
+      const API_BASE = IS_DEV ? "http://localhost:3000" : "";
       const qEach = (query, fn) => document.querySelectorAll(query).forEach(fn);
       const q = (query) => document.querySelector(query);
 
-      // input data
+      // listen to input change
       const form = {};
       qEach("form input", (input) => {
         form[input.name] = input.value;
@@ -115,72 +120,74 @@
       // variables
       let listRedirects = [];
 
-      // functions
-      function insertRedirect(from, to) {
+      // STEP 1
+      function insertRedirect(pathname, destination) {
         const template = q("#form-row");
         const nextLine = template.cloneNode(true);
 
         nextLine.id = "";
-        nextLine.querySelector("input[name=from]").parentNode.innerHTML = from;
-        nextLine.querySelector("input[name=to]").parentNode.innerHTML = to;
-        nextLine.querySelector("a").href = 'https://'+form.domain+'/'+from
+        nextLine.querySelector("input[name=pathname]").parentNode.innerHTML =
+          pathname;
+        nextLine.querySelector("input[name=destination]").parentNode.innerHTML =
+          destination;
+        nextLine.querySelector("a").href =
+          "https://" + form.domain + "/" + destination;
         template.parentNode.insertBefore(nextLine, template);
       }
       function fetchRedirects(domain) {
-        const qs = new URLSearchParams({ domain: form.domain });
-        fetch(API_BASE + "/redirect?" + qs)
+        fetch(API_BASE + "/redirects/" + form.domain)
           .then((r) => r.json())
           .then((redirects) => {
             const template = q("#form-row");
             const nodes = (redirects || []).forEach((redirect) => {
-              const from = redirect.key.replace(form.domain + "/", "");
-              insertRedirect(from, redirect.value);
+              insertRedirect(redirect.pathname, redirect.destination);
             });
           });
       }
 
-      q("#domain-continue").addEventListener("click", (event) => {
-        event.preventDefault(); // avoid validating the form
+      q("input[name=domain]").addEventListener("blur", () => {
         const SUB_DOMAIN_REGEX =
           /^(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,7}$/;
         const isValid = SUB_DOMAIN_REGEX.test(form.domain);
         const domainInput = q("input[name=domain]");
         if (isValid) {
-          domainInput.disabled = true;
-          event.target.disabled = true;
-          q("input[name=from]").disabled = false;
-          q("input[name=to]").disabled = false;
-          q("input[name=from]").focus();
-          fetchRedirects(form.domain)
+          // event.target.disabled = true;
+          q("input[name=pathname]").disabled = false;
+          q("input[name=destination]").disabled = false;
+          q("input[name=pathname]").focus();
+          fetchRedirects(form.domain);
+          q("#instr-domain").innerHTML = form.domain;
+          q("#instr").style.display = "block";
         } else {
           domainInput.setCustomValidity("Your subdomain is not right...");
           domainInput.reportValidity();
+          q("#instr").style.display = "none";
         }
       });
 
-      // Create a redirect
-      q("form").addEventListener("submit", async (event) => {
+      // STEP 2 - Create a redirect
+      q("#add-redirect").addEventListener("click", async (event) => {
         event.preventDefault();
         const body = JSON.stringify(form);
-        await fetch(API_BASE + "/redirect", { method: "PUT", body });
-        insertRedirect(form.from,form.to);
-        q("input[name=from]").value = "";
-        q("input[name=to]").value = "";
-        q("input[name=from]").focus();
+        await fetch(API_BASE + "/redirects", { method: "POST", body });
+        insertRedirect(form.pathname, form.destination);
+        q("input[name=pathname]").value = "";
+        q("input[name=destination]").value = "";
+        q("input[name=pathname]").focus();
       });
 
-      // On domain blur
-      function displayInstruction(domain) {
-        qEach(".pre-url", (e) => { e.innerHTML = "https://" + domain + "/" });
-        q("#instr-domain").innerHTML = domain;
-        q("#instr").style.display = "block";
-      }
-      if (form.domain) displayInstruction(form.domain);
-
-      q("form input[name=domain]").addEventListener(
-        "blur",
-        (event) => event.target.value && displayInstruction(event.target.value)
-      );
+      // STEP 3 - Check DNS
+      q("#check-dns").addEventListener("click", async (event) => {
+        event.preventDefault();
+        const body = JSON.stringify({ domain: form.domain });
+        q('#dns-status').innerHTML = 'Loading ...'
+        const response = await fetch(API_BASE + "/dns", { method: "POST", body });
+        if(response.status===201){
+          q('#dns-status').innerHTML = 'DNS is properly set'
+        } else {
+          q('#dns-status').innerHTML = 'DNS was not found'
+        }
+      });
     </script>
   </body>
 </html>

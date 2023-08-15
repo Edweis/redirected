@@ -7,7 +7,7 @@ import { Redirect, RedirectNew, db } from '../lib/database.js'
 
 const schemaRedirectPut: yup.ObjectSchema<RedirectNew> = yup.object({
   domain: yup.string().required(),
-  pathname: yup.string().matches(/^\/\w/).required(),
+  pathname: yup.string().matches(/^\w/).required(),
   destination: yup.string().url().required()
 }).required()
 export const redirectPost: Middleware = async (ctx, next) => {
@@ -27,6 +27,7 @@ export const redirectPost: Middleware = async (ctx, next) => {
 
 export const redirectGet: Middleware = async (ctx, next) => {
   const domain = /\/redirects\/([\w\.]+)/.exec(ctx.path)?.[1]
+  console.log()
   if (domain == null || ctx.method !== 'GET') return next()
 
   const redirects = await db.all<Redirect[]>(

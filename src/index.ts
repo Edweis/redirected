@@ -7,6 +7,7 @@ import { bodyParser, errorHandler, forceHttps, initDb } from './middlewares/help
 import { redirectGet, redirectPost } from './api/redirect.js';
 import { rootWebsite, wellKnownForCerts } from './middlewares/static.js';
 import { httpsOptions } from './middlewares/https-options.js';
+import { dnsCheckPost } from './api/dns.js';
 
 void initDb()
 const app = new koa();
@@ -24,6 +25,7 @@ app.use(wellKnownForCerts);
 app.use(health)
 app.use(redirectGet)
 app.use(redirectPost)
+app.use(dnsCheckPost)
 
 const IS_PROD = process.env.NODE_ENV === 'production'
 

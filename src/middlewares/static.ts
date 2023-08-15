@@ -11,6 +11,13 @@ export const rootWebsite: Middleware = async (ctx, next) => {
   ctx.body = fs.createReadStream(pathName);
 }
 
+// CSS
+export const cssFile: Middleware = async (ctx, next) => {
+  if (ctx.path !== '/styles.css') return next()
+  const pathName = path.join(projectRoot(), 'dist/styles.css')
+  ctx.body = fs.createReadStream(pathName);
+}
+
 // Certificates
 export const wellKnownForCerts: Middleware = async (ctx, next) => {
   const file = /^\/\.well-known\/(.+)$/.exec(ctx.path)?.[1]
