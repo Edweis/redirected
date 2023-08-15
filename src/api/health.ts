@@ -1,3 +1,4 @@
+import { projectRoot } from "../lib/helpers.js";
 import { Middleware } from "../lib/types.js"
 
 function formatSeconds(seconds) {
@@ -16,6 +17,6 @@ export const health: Middleware = async (ctx, next) => {
   if (ctx.path !== '/health') return next();
   const lastUpdate = new Date(process.env.DEPLOYED_AT).getTime()
   const diff = (new Date().getTime() - lastUpdate) / 1000
-  console.log(process.cwd())
+  console.log(projectRoot())
   ctx.body = `💪 All good bro 💪 \nMy last build is ${formatSeconds(diff)} old`
 }
