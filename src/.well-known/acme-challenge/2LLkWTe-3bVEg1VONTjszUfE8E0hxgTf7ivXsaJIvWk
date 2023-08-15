@@ -1,0 +1,8 @@
+That's a sample file to make sure that the challenge response work.
+
+As of this commit, I managed to create a cretificate by running:
+  sudo certbot certonly --webroot -w . -d redirected.app --test-cert -m francois@garnet.center
+at
+  ~/apps/redirected/src/
+
+I had to disable cloudflare DNS proxy.
