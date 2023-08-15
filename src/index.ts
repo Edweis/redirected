@@ -15,7 +15,7 @@ const app = new koa();
 app.use(errorHandler);
 app.use(bodyParser);
 app.use(cors());
-app.use(forceHttps);
+// app.use(forceHttps);
 
 
 // Static assets

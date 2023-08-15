@@ -18,5 +18,5 @@ else
    ssh -q edweis@ssh.redirected.app "pm2 startup && pm2 save" # save the config so the process starts on server reboot
 fi
 sleep 2
-curl redirected.app/health
+curl https://redirected.app/health
 
