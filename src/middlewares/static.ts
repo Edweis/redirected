@@ -15,6 +15,7 @@ export const rootWebsite: Middleware = async (ctx, next) => {
 export const cssFile: Middleware = async (ctx, next) => {
   if (ctx.path !== '/styles.css') return next()
   const pathName = path.join(projectRoot(), 'dist/styles.css')
+  ctx.type = 'text/css'
   ctx.body = fs.createReadStream(pathName);
 }
 

@@ -33,7 +33,7 @@ export const errorHandler: Middleware = async (ctx, next) => {
 export const bodyParser: Middleware = async (ctx, next) => {
   if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(ctx.method)) {
     const body = await parse(ctx.req);
-    ctx.state = { body:JSON.parse(body) };
+    ctx.state = { body: JSON.parse(body) };
   }
   return next()
 }
@@ -45,4 +45,9 @@ export const forceHttps: Middleware = async (ctx, next) => {
   nextUrl.protocol = 'https'
   console.log('Redireting to ', nextUrl.toString())
   return ctx.redirect(nextUrl.toString())
+}
+export const log: Middleware = async (ctx, next) => {
+  console.log(`> ${ctx.method} ${ctx.path}`)
+  await next();
+  console.log(`< ${ctx.status||404} ${ctx.method} ${ctx.path}`)
 }
