@@ -128,7 +128,8 @@ form {
                 margin: 0;
                 text-align: right;
                 font-size: 0.9rem;
-                color: var(--color-content-lite);
+                color: var(--color-content-litest);
+                transition: color 0.2s ease-in-out;
             }
         }
 
@@ -139,6 +140,10 @@ form {
             flex-direction: column;
             gap: var(--length-gap-s);
         }
+    }
+
+    :is(.element:focus-within, .element:hover) .title p {
+        color: var(--color-content-lite)
     }
 }
 
