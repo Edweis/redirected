@@ -1,3 +1,4 @@
+import { exec } from 'child_process'
 import { ValidationError } from "yup";
 import { db } from "../lib/database.js";
 import { Middleware } from "../lib/types.js";
@@ -13,8 +14,8 @@ export const initDb = async () => {
                   deletedAt TIMESTAMP,
                   PRIMARY KEY (domain, pathname)
                 );`)
-  const { count } = await db.get<{ count: number }>('SELECT COUNT(*) as count FROM redirects');
-  console.log('Redirect count: ' + count)
+  const count = await db.get<{ count: number }>('SELECT COUNT(*) as count FROM redirects');
+  console.log('Redirect count: ' + count?.count)
 }
 
 export const errorHandler: Middleware = async (ctx, next) => {
@@ -24,7 +25,7 @@ export const errorHandler: Middleware = async (ctx, next) => {
       ctx.body = e.message;
       ctx.status = 400
     } else {
-      ctx.body = 'Internal Server Error: ' + e.message,
+      ctx.body = 'Internal Server Error: ' + (e as Error).message,
         ctx.status = 500
       console.error(e)
     }
@@ -59,3 +60,13 @@ export const limiter = RateLimit.middleware({
   max: 30, // limit each IP to 100 requests per interval
 });
 
+
+export const execPromise = (command: string) => new Promise<string>((res, rej) => {
+  console.log('Running command:\n', command)
+  exec(command, (err, stdout, sterr) => {
+    if (sterr) console.warn(sterr)
+    if (stdout) console.warn(stdout)
+    return err ? rej(err) : res(stdout)
+  })
+}
+)

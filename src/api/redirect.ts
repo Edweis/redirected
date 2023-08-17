@@ -1,6 +1,7 @@
 import * as yup from 'yup'
 import { Middleware } from '../lib/types.js'
 import { Redirect, RedirectNew, db } from '../lib/database.js'
+import { execPromise } from '../middlewares/helpers.js'
 
 
 
@@ -52,45 +53,57 @@ const mapNsToUrl = [
     name: 'AWS Route 53',
     regex: /awsdns/,
     url: 'https://us-east-1.console.aws.amazon.com/route53/v2/hostedzones',
-    text: domain => `AWS > Route 53 > Hosted Zones > ${domain} > Create record`
+    text: (domain: string) => `AWS > Route 53 > Hosted Zones > ${domain} > Create record`
   },
   {
     name: 'Cloudflare DNS',
     regex: /cloudflare/,
     url: 'https://dash.cloudflare.com/',
-    text: domain => `Domain registration > Manage domain > ${domain} > Update DNS configuration`
+    text: (domain: string) => `Domain registration > Manage domain > ${domain} > Update DNS configuration`
   },
   {
     name: 'Google DNS',
     regex: /google/,
     url: () => 'https://console.cloud.google.com/net-services/dns/',
     instruction: 'https://cloud.google.com/identity/docs/add-cname',
-    text: domain => `${domain} > Zone details > Add standard`
+    text: (domain: string) => `${domain} > Zone details > Add standard`
   },
   {
     name: 'OVH DNS',
     regex: /ovh/,
     url: () => 'https://www.ovh.com/auth/?action=gotomanager&from=https://www.ovh.co.uk/&ovhSubsidiary=GB',
     instruction: 'https://help.ovhcloud.com/csm/en-gb-dns-edit-dns-zone?id=kb_article_view&sysparm_article=KB0039608',
-    text: domain => `Web Cloud > Domain names > ${domain} > DNS Zone > Add an entry`
+    text: (domain: string) => `Web Cloud > Domain names > ${domain} > DNS Zone > Add an entry`
   },
   {
     name: 'Go Daddy',
     regex: /domaincontrol/,
-    url: domain => 'https://dcc.godaddy.com/control/portfolio/' + domain + '/settings?tab=dns&itc=mya_vh_buildwebsite_domain',
+    url: (domain: string) => 'https://dcc.godaddy.com/control/portfolio/' + domain + '/settings?tab=dns&itc=mya_vh_buildwebsite_domain',
     instruction: 'https://www.godaddy.com/help/manage-dns-records-680',
-    text: domain => `Web Cloud > Domain names > ${domain} > DNS Zone > Add an entry`
+    text: (domain: string) => `Web Cloud > Domain names > ${domain} > DNS Zone > Add an entry`
   },
   {
     name: 'Name cheap',
     regex: /wixdns/,
-    url: domain => `https://ap.www.namecheap.com/Domains/DomainControlPanel/${domain}/advancedns`,
+    url: (domain: string) => `https://ap.www.namecheap.com/Domains/DomainControlPanel/${domain}/advancedns`,
     instruction: 'https://www.namecheap.com/support/knowledgebase/article.aspx/319/2237/how-can-i-set-up-an-a-address-record-for-my-domain/',
-    text: domain => `Web Cloud > Domain names > ${domain} > DNS Zone > Add an entry`
+    text: (domain: string) => `Domain list > ${domain} > Manage > Advanced DNS > Hosted records > Add news records`
   },
 ]
+const omit = <T extends Record<any, any>, K extends keyof T>(obj: T, key: K): Omit<T, K> => {
+  if (obj == null) return obj
+  const clone = Object.assign({}, obj);
+  delete clone[key];
+  return clone
+}
 export const redirectDoc: Middleware = async (ctx, next) => {
   const domain = /\/redirects\/([\w\.]+)\/docs/.exec(ctx.path)?.[1]
   if (domain == null || ctx.method !== 'GET') return next();
+  const nsServers = await execPromise(`dig ${domain} ns +short`);
+  const selectedNs = mapNsToUrl.find(n => n.regex.test(nsServers));
+  ctx.body = {
+    selected: selectedNs && omit(selectedNs, 'regex'),
+    all: mapNsToUrl.map(item => omit(item, 'regex'))
+  }
 
 }

@@ -2,21 +2,13 @@ import * as yup from 'yup'
 import { Middleware } from '../lib/types.js'
 import dns from 'dns/promises'
 import fs from 'fs'
-import { exec } from 'child_process'
 import { SUB_DOMAIN_REG, projectRoot } from '../lib/helpers.js'
 import mem from 'mem';
+import { execPromise } from '../middlewares/helpers.js'
 
 const isProd = process.env.NODE_ENV==='production'
 const certPath = `${projectRoot()}/../certs/live`
-const execPromise = (command: string) => new Promise<string>((res, rej) => {
-  console.log('Running command:\n', command)
-  exec(command, (err, stdout, sterr) => {
-    if (sterr) console.warn(sterr)
-    if (stdout) console.warn(stdout)
-    return err ? rej(err) : res(stdout)
-  })
-}
-)
+
 const getCname = mem(
   async (domain: string) =>  execPromise(`dig ${domain} cname +trace +short`),
   { maxAge: 1000 }
