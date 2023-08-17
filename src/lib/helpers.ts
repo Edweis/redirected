@@ -11,3 +11,5 @@ export const projectRoot = (_base?: string) => {
   cacheProjectRoot = base;
   return base
 }
+
+export const SUB_DOMAIN_REG = /^(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,7}$/;
