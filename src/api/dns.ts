@@ -42,3 +42,4 @@ export const dnsCheckPost: Middleware = async (ctx, next) => {
   ctx.body = { isValid }
   if (isValid && isProd && !hasCertificate(domain)) await createCertificate(domain)
 }
+
