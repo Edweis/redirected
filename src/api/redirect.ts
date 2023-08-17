@@ -35,3 +35,14 @@ export const redirectGet: Middleware = async (ctx, next) => {
   )
   ctx.body = redirects
 }
+
+
+export const redirectDelete: Middleware = async (ctx, next)=>{
+  const domain = /\/redirects\/([\w\.]+)/.exec(ctx.path)?.[1]
+  if(domain == null || ctx.method!=='DELETE') return next();
+  await db.all(
+    `UPDATE your_table SET deletedAt = datetime('now') WHERE domain = $1;`,
+    [domain]
+  )
+  ctx.body = undefined;
+}

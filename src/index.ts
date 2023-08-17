@@ -4,7 +4,7 @@ import http from 'http';
 import https from 'https';
 import { health } from './api/health.js';
 import { bodyParser, errorHandler, forceHttps, initDb, limiter, log } from './middlewares/helpers.js';
-import { redirectGet, redirectPost } from './api/redirect.js';
+import { redirectDelete, redirectGet, redirectPost } from './api/redirect.js';
 import { cssFile, rootWebsite, wellKnownForCerts } from './middlewares/static.js';
 import { httpsOptions } from './middlewares/https-options.js';
 import { dnsCheckPost } from './api/dns.js';
@@ -32,6 +32,7 @@ app.use(forwardLink)
 app.use(health)
 app.use(redirectGet)
 app.use(redirectPost)
+app.use(redirectDelete)
 app.use(dnsCheckPost)
 
 
