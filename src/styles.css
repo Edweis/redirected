@@ -223,6 +223,10 @@ footer {
     justify-content: center;
     color: var(--color-content-litest);
 
+    p {
+        text-align: center;
+    }
+
     a {
         color: var(--color-primary-liter);
         text-decoration: none;
