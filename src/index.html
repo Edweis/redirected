@@ -3,6 +3,7 @@
 <head>
     <title>Redirected App</title>
     <link href="./styles.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
 <div class="wrapper">
@@ -14,23 +15,35 @@
     <form>
         <div class="element">
             <div class="title">
-                Subdomain
+                <h2>
+                    Subdomain
+                </h2>
+                <p>
+                    Enter your subdomain.
+                </p>
             </div>
-            <label class="input">
-                <input
-                        required
-                        type="text"
-                        placeholder="link.domain.com"
-                        name="domain"
-                        autofocus
-                />
-            </label>
+            <div class="content">
+                <label class="input">
+                    <input
+                            required
+                            type="text"
+                            placeholder="link.domain.com"
+                            name="domain"
+                            autofocus
+                    />
+                </label>
+            </div>
         </div>
         <div class="element">
             <div class="title">
-                Redirection
+                <h2>
+                    Redirections
+                </h2>
+                <p>
+                    Create as many redirections as you'd like.
+                </p>
             </div>
-            <div class="redirections">
+            <div class="content">
                 <div class="redirection">
                     <label class="input">
                         <input
@@ -42,6 +55,7 @@
                                 autofocus
                         />
                     </label>
+                    <i class="fa-solid fa-arrow-right"></i>
                     <label class="input">
                         <input
                                 class="to"
@@ -52,22 +66,28 @@
                                 autofocus
                         />
                     </label>
-                    <div class="option">
-                        <span class="button">Open</span> / <span class="button">Delete</span>
+                    <div class="options">
+                        <span class="button square"><i class="fa-solid fa-link"></i></span>
+                        <span class="button square"><i class="fa-solid fa-trash"></i></span>
                     </div>
                 </div>
-                <span class="button">Add</span>
+                <span class="button"><i class="fa-solid fa-plus"></i> New redirection</span>
             </div>
         </div>
 
         <div class="element">
             <div class="title">
-                DNS Check
+                <h2>
+                    DNS Check
+                </h2>
+                <p>
+                    Check if your DNS is properly configured.
+                </p>
             </div>
             <div class="content">
-                <div class="intructions">
+                <div class="instructions">
                     <p>
-                    Add a CNAME record to link from
+                        Add a CNAME record to link from
                     <pre id="instr-domain">link.domain.com</pre>
                     to
                     <pre>redirected.app</pre>

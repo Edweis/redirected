@@ -1,5 +1,167 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=REM:wght@400;600&family=Raleway:wght@400;700&display=swap');
 
+:root {
+    --color-background: hsl(60, 5%, 12%);
+    --color-primary: hsl(0, 74%, 49%);
+    --color-content: hsl(60, 18%, 90%);
+    --color-content-lite: hsla(60, 18%, 90%, 80%);
+    --color-content-liter: hsla(60, 18%, 90%, 50%);
+    --color-content-litest: hsla(60, 18%, 90%, 25%);
 
+    --color-content-soft: hsla(60, 18%, 90%, 10%);
+    --color-content-softer: hsla(60, 18%, 90%, 5%);
+    --color-content-softest: hsla(60, 18%, 90%, 2%);
+
+    --length-gap-s: 8px;
+    --length-gap-m: 16px;
+    --length-gap-l: 24px;
+    --length-gap-xl: 32px;
+    --length-gap-xxl: 48px;
+
+    --length-padding-s: 8px;
+    --length-padding-m: 16px;
+    --length-padding-l: 32px;
+    --length-padding-xl: 48px;
+
+    --lenght-radius-m: 32px;
+}
+
+body, html {
+    background: var(--color-background);
+    font-family: 'Raleway', sans-serif;
+    color: var(--color-content);
+}
+
+h1 {
+    color: var(--color-primary);
+    font-weight: 700;
+    font-size: 3.5rem;
+    margin: 0;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+}
+
+.wrapper {
+    width: 100%;
+    max-width: 800px;
+    padding: var(--length-padding-xl);
+    display: flex;
+    flex-direction: column;
+    gap: var(--length-gap-xxl);
+}
+
+.header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--length-gap-s);
+
+    & p {
+        margin: 0;
+        font-size: 1.5rem;
+    }
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--length-gap-m);
+
+    .element {
+        display: flex;
+        gap: var(--length-gap-m);
+
+        .title {
+            flex: 0 0 196px;
+
+            & h2 {
+                margin: 0;
+                color: var(--color-primary);
+                font-weight: 700;
+                font-size: 1.5rem;
+                height: 42px;
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+            }
+
+            & p {
+                margin: 0;
+                text-align: right;
+                font-size: 0.9rem;
+                color: var(--color-content-lite);
+            }
+        }
+
+        .content {
+            flex-grow: 1;
+            flex-shrink: 1;
+            display: flex;
+            flex-direction: column;
+            gap: var(--length-gap-s);
+        }
+    }
+}
+
+.input {
+    border: 3px solid var(--color-content-litest);
+    border-radius: var(--lenght-radius-m);
+    height: 42px;
+    display: flex;
+    transition: all 0.2s ease-in-out;
+    padding: 0 var(--length-padding-s);
+    box-sizing: border-box;
+
+    & input {
+        margin: 0;
+        color: inherit;
+        font-size: 1rem;
+        padding: var(--length-padding-s);
+        border: none;
+        background: none;
+        outline: none;
+        width: 100%;
+    }
+
+    &:focus-within {
+        border-color: var(--color-primary);
+        background: var(--color-content-soft);
+    }
+}
+
+.redirection {
+    display: flex;
+    align-items: center;
+    gap: var(--length-gap-s);
+
+    .options {
+        display: flex;
+        gap: var(--length-gap-s);
+    }
+
+    .input {
+        flex: 1 1 0;
+    }
+}
+
+.button {
+    height: 42px;
+    border-radius: var(--lenght-radius-m);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-content-soft);
+    gap: var(--length-gap-s);
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+
+    &.square {
+        width: 42px;
+    }
+
+    &:hover {
+        background: var(--color-primary);
+    }
+}
