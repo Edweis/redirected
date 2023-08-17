@@ -1,103 +1,83 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <title>Redirected App</title>
     <link href="./styles.css" rel="stylesheet"/>
 </head>
 <body>
-<h1>Redirected.app</h1>
-<p>Create a custom redirect in 2 minutes.</p>
-
-<form>
-    <article>
-        <div>1</div>
-        <div>
-            My subdomain is
-            <input
-                    required
-                    type="text"
-                    placeholder="link.domain.com"
-                    name="domain"
-                    autofocus
-            />
-        </div>
-    </article>
-    <article>
-        <div>2</div>
-        <div>I want to redirect:</div>
-    </article>
-    <article>
-        <table>
-            <tr>
-                <th></th>
-                <th>From</th>
-                <th>To URL</th>
-                <th></th>
-            </tr>
-            <tr id="form-row">
-                <td>
-                    https://link.domain.com/
-                </td>
-                <td>
-                    <input
-                            disabled
-                            class="border py-1 px-2 rounded disabled:bg-gray-300"
-                            required
-                            type="text"
-                            placeholder="events/meeting"
-                            name="pathname"
-                    />
-                </td>
-                <td>
-                    <input
-                            disabled
-                            class="border py-1 px-2 rounded disabled:bg-gray-300"
-                            required
-                            type="url"
-                            placeholder="https://..."
-                            name="destination"
-                    />
-                </td>
-                <td class="group-last:hidden">
-                    <a href="#" target="_blank">Open</a>
-                    <button>Delete</button>
-                </td>
-            </tr>
-        </table>
-        <div>
-            <button
-                    id="add-redirect"
-                    class="border px-4 py-1 bg-orange-300 rounded disabled:opacity-70"
-            >
-                Add redirect
-            </button>
-        </div>
-    </article>
-    <article>
-        <div>3</div>
-        <div>I update my DNS</div>
-    </article>
-    <article id="instr" style="display: none">
-        Add a CNAME record to link from
-        <pre id="instr-domain">link.domain.com</pre>
-        to
-        <pre>redirected.app</pre>
-    </article>
-    <div>
-        <button
-                id="check-dns"
-                class="border px-4 py-1 bg-orange-300 rounded disabled:opacity-70"
-        >
-            Check the DNS
-        </button>
-        <span id="dns-status"></span>
+<div class="wrapper">
+    <div class="header">
+        <h1>Redirected.app</h1>
+        <p>Create a custom redirect in 2 minutes.</p>
     </div>
-</form>
 
-<div id="instr" style="display: none">
-    Add a CNAME record to link from
-    <pre id="instr-domain">link.domain.com</pre>
-    to
-    <pre>redirected.app</pre>
+    <form>
+        <div class="element">
+            <div class="title">
+                Subdomain
+            </div>
+            <label class="input">
+                <input
+                        required
+                        type="text"
+                        placeholder="link.domain.com"
+                        name="domain"
+                        autofocus
+                />
+            </label>
+        </div>
+        <div class="element">
+            <div class="title">
+                Redirection
+            </div>
+            <div class="redirections">
+                <div class="redirection">
+                    <label class="input">
+                        <input
+                                class="from"
+                                required
+                                type="text"
+                                placeholder="link.domain.com"
+                                name="domain"
+                                autofocus
+                        />
+                    </label>
+                    <label class="input">
+                        <input
+                                class="to"
+                                required
+                                type="text"
+                                placeholder="link.domain.com"
+                                name="domain"
+                                autofocus
+                        />
+                    </label>
+                    <div class="option">
+                        <span class="button">Open</span> / <span class="button">Delete</span>
+                    </div>
+                </div>
+                <span class="button">Add</span>
+            </div>
+        </div>
+
+        <div class="element">
+            <div class="title">
+                DNS Check
+            </div>
+            <div class="content">
+                <div class="intructions">
+                    <p>
+                    Add a CNAME record to link from
+                    <pre id="instr-domain">link.domain.com</pre>
+                    to
+                    <pre>redirected.app</pre>
+                    </p>
+                    <span class="button">Check DNS</span>
+                    <span id="dns-status"></span>
+                </div>
+            </div>
+        </div>
+    </form>
 </div>
 
 <script src="./script.js"></script>
