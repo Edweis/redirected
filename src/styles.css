@@ -2,7 +2,11 @@
 
 :root {
     --color-background: hsl(60, 5%, 12%);
+
     --color-primary: hsl(0, 74%, 49%);
+    --color-primary-lite: hsla(0, 74%, 49%, 80%);
+    --color-primary-liter: hsla(0, 74%, 49%, 50%);
+
     --color-content: hsl(60, 18%, 90%);
     --color-content-lite: hsla(60, 18%, 90%, 80%);
     --color-content-liter: hsla(60, 18%, 90%, 50%);
@@ -53,7 +57,7 @@ body {
     gap: var(--length-gap-xxl);
 }
 
-.header {
+header {
     display: flex;
     flex-direction: column;
     gap: var(--length-gap-s);
@@ -67,11 +71,15 @@ body {
 form {
     display: flex;
     flex-direction: column;
-    gap: var(--length-gap-m);
+    gap: var(--length-gap-xl);
 
     .element {
         display: flex;
         gap: var(--length-gap-m);
+
+        &.disabled {
+            opacity: 0.5;
+        }
 
         .title {
             flex: 0 0 196px;
@@ -163,5 +171,30 @@ form {
 
     &:hover {
         background: var(--color-primary);
+    }
+}
+
+.instructions {
+    p {
+        line-height: 1.6rem;
+        .link {
+            font-weight: 700;
+        }
+    }
+}
+
+footer {
+    display: flex;
+    justify-content: center;
+    color: var(--color-content-litest);
+
+    a {
+        display: inline;
+        color: var(--color-primary-liter);
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
     }
 }
