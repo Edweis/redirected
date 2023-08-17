@@ -49,11 +49,14 @@
             <div class="content">
                 <div class="redirection">
                     <label class="input">
+                        <span class="prefix">
+                        link.domain.com/
+                        </span>
                         <input
                                 class="from"
                                 required
                                 type="text"
-                                placeholder="link.domain.com"
+                                placeholder="meeting"
                                 name="domain"
                                 autofocus
                         />
@@ -64,7 +67,7 @@
                                 class="to"
                                 required
                                 type="text"
-                                placeholder="link.domain.com"
+                                placeholder="google.com"
                                 name="domain"
                                 autofocus
                         />
@@ -97,9 +100,9 @@
                         to
                         <span class="link">redirected.app</span>
                     </p>
-                    <span class="button">Check DNS</span>
-                    <span id="dns-status"></span>
                 </div>
+                <span class="button">Check DNS</span>
+                <span id="dns-status"></span>
             </div>
         </div>
     </form>

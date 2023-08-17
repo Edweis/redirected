@@ -122,18 +122,26 @@ form {
     height: 42px;
     display: flex;
     transition: all 0.2s ease-in-out;
-    padding: 0 var(--length-padding-s);
+    padding: 0 var(--length-padding-m);
     box-sizing: border-box;
+    align-items: center;
+
+    .prefix {
+        color: var(--color-content-litest);
+    }
 
     & input {
         margin: 0;
         color: inherit;
         font-size: 1rem;
-        padding: var(--length-padding-s);
+        font-family: inherit;
+        padding: var(--length-padding-s) 0;
         border: none;
         background: none;
         outline: none;
         width: 100%;
+        display: flex;
+        align-items: center;
     }
 
     &:focus-within {
@@ -179,7 +187,9 @@ form {
 
 .instructions {
     p {
+        margin: 0;
         line-height: 1.6rem;
+
         .link {
             font-weight: 700;
         }
