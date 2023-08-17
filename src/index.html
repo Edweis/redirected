@@ -143,7 +143,7 @@
         nextLine.querySelector("input[name=destination]").parentNode.innerHTML =
           destination;
         nextLine.querySelector("a").href =
-          "https://" + form.domain + "/" + destination;
+          "https://" + form.domain + "/" + pathname;
         q("#" + nextLine.id)?.remove(); // remove existing before adding
         template.parentNode.insertBefore(nextLine, template);
       }
@@ -153,8 +153,9 @@
           .then((redirects) => {
             const template = q("#form-row");
             // remove existing rows
-            template.parentNode.childNodes.forEach( 
-              (node, index) => index > 0 && node.id !== "form-row" && node.remove()
+            template.parentNode.childNodes.forEach(
+              (node, index) =>
+                index > 0 && node.id !== "form-row" && node.remove()
             );
             const nodes = (redirects || []).forEach((redirect) => {
               insertRedirect(redirect.pathname, redirect.destination);
@@ -198,15 +199,11 @@
         event.preventDefault();
         const body = JSON.stringify({ domain: form.domain });
         q("#dns-status").innerHTML = "Loading ...";
-        const response = await fetch(API_BASE + "/dns", {
-          method: "POST",
-          body,
-        });
-        if (response.status === 201) {
-          q("#dns-status").innerHTML = "DNS is properly set";
-        } else {
-          q("#dns-status").innerHTML = "DNS was not found";
-        }
+        const response = await fetch(API_BASE + "/dns", { method: "POST", body });
+        const { isValid } = await response.json();
+        q("#dns-status").innerHTML = isValid
+          ? "DNS is properly set"
+          : "DNS was not found";
       });
     </script>
   </body>

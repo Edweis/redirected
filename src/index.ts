@@ -8,6 +8,7 @@ import { redirectGet, redirectPost } from './api/redirect.js';
 import { cssFile, rootWebsite, wellKnownForCerts } from './middlewares/static.js';
 import { httpsOptions } from './middlewares/https-options.js';
 import { dnsCheckPost } from './api/dns.js';
+import { forwardLink } from './middlewares/forward-link.js';
 
 void initDb()
 const app = new koa();
@@ -16,13 +17,16 @@ app.use(log);
 app.use(bodyParser);
 app.use(cors());
 if(process.env.NODE_ENV === 'production') app.use(limiter);
-// app.use(forceHttps);
+app.use(forceHttps);
 
 
 // Static assets
 app.use(rootWebsite);
 app.use(wellKnownForCerts);
 app.use(cssFile);
+
+// forward from custom URL to destination
+app.use(forwardLink)
 
 // Api
 app.use(health)

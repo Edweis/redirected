@@ -23,7 +23,7 @@ const getCname = mem(
 )
 const hasCertificate = (domain: string) => fs.existsSync(`${certPath}/${domain}/fullchain.pem`)
 const createCertificate = async (domain: string) => execPromise(`
-  certbot certonly --test-cert --webroot --agree-tos -n \
+  certbot certonly --webroot --agree-tos -n \
     --work-dir ~/redirected/certs --config-dir ~/redirected/certs --logs-dir ~/redirected/certs \
     --webroot-path ~/redirected/app/src/ \
     -d ${domain}  \
