@@ -3,7 +3,7 @@ import { ValidationError } from "yup";
 import { db } from "../lib/database.js";
 import { Middleware } from "../lib/types.js";
 import parse from 'co-body'
-import {RateLimit} from 'koa2-ratelimit';
+import { RateLimit } from 'koa2-ratelimit';
 
 export const initDb = async () => {
   await db.exec(`CREATE TABLE IF NOT EXISTS redirects (
@@ -52,11 +52,11 @@ export const forceHttps: Middleware = async (ctx, next) => {
 export const log: Middleware = async (ctx, next) => {
   console.log(`> ${ctx.method} ${ctx.path}`)
   await next();
-  console.log(`< ${ctx.status||404} ${ctx.method} ${ctx.path}`)
+  console.log(`< ${ctx.status || 404} ${ctx.method} ${ctx.path}`)
 }
 
 export const limiter = RateLimit.middleware({
-  interval: { min: 5 }, 
+  interval: { min: 5 },
   max: 30, // limit each IP to 100 requests per interval
 });
 
