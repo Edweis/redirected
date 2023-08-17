@@ -75,20 +75,19 @@ header {
 
 .github {
     position: absolute;
-    font-size: 4rem;
-    background: var(--color-primary);
+    font-size: 5rem;
     width: 96px;
     height: 96px;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    top: -20px;
-    right: -20px;
+    top: -16px;
+    right: -16px;
     transform: rotate(-20deg);
     transition: transform 0.2s ease-in-out;
     cursor: pointer;
-    color: var(--color-content);
+    color: var(--color-primary);
     text-decoration: none;
 
     &:hover {
