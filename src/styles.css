@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=REM:wght@400;600&family=Raleway:wght@400;700&display=swap');
 
 :root {
-    --color-background: hsl(60, 5%, 12%);
+    --color-background: hsl(60, 3%, 13%);
 
     --color-primary: hsl(0, 74%, 49%);
     --color-primary-lite: hsla(0, 74%, 49%, 80%);
@@ -82,6 +82,7 @@ form {
 
         &.disabled {
             opacity: 0.5;
+            filter: grayscale(1);
         }
 
         .title {
@@ -152,8 +153,16 @@ form {
 
 .redirection {
     display: flex;
+    flex-direction: column;
     align-items: center;
     gap: var(--length-gap-s);
+
+    .line {
+        display: flex;
+        align-items: center;
+        gap: var(--length-gap-s);
+        width: 100%;
+    }
 
     .options {
         display: flex;
@@ -186,12 +195,25 @@ form {
 }
 
 .instructions {
+    display: flex;
+    gap: var(--length-gap-s);
+    flex-direction: column;
+
     p {
         margin: 0;
         line-height: 1.6rem;
 
         .link {
             font-weight: 700;
+        }
+
+        a {
+            color: var(--color-primary);
+            text-decoration: none;
+
+            &:hover {
+                text-decoration: underline;
+            }
         }
     }
 }
@@ -202,7 +224,6 @@ footer {
     color: var(--color-content-litest);
 
     a {
-        display: inline;
         color: var(--color-primary-liter);
         text-decoration: none;
 

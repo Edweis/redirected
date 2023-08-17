@@ -37,7 +37,7 @@
                 </label>
             </div>
         </div>
-        <div class="element" id="redirections">
+        <div class="element disabled" id="redirections">
             <div class="title">
                 <h2>
                     Redirections
@@ -48,34 +48,41 @@
             </div>
             <div class="content">
                 <div class="redirection">
-                    <label class="input">
+                    <div class="line">
+                        From:
+                        <label class="input">
                         <span class="prefix">
                         link.domain.com/
                         </span>
-                        <input
-                                class="from"
-                                required
-                                type="text"
-                                placeholder="meeting"
-                                name="domain"
-                                autofocus
-                        />
-                    </label>
-                    <i class="fa-solid fa-arrow-right"></i>
-                    <label class="input">
-                        <input
-                                class="to"
-                                required
-                                type="text"
-                                placeholder="google.com"
-                                name="domain"
-                                autofocus
-                        />
-                    </label>
-                    <div class="options">
+                            <input
+                                    class="from"
+                                    required
+                                    type="text"
+                                    placeholder="meeting"
+                                    name="domain"
+                                    autofocus
+                            />
+                        </label>
+                    </div>
+
+                    <div class="line">
+                        To:
+                        <label class="input">
+                            <input
+                                    class="to"
+                                    required
+                                    type="text"
+                                    placeholder="google.com"
+                                    name="domain"
+                                    autofocus
+                            />
+                        </label>
+                        <div class="options">
                         <span class="button square" title="Copy link to clipboard"><i
                                 class="fa-solid fa-link"></i></span>
-                        <span class="button square" title="Delete redirection"><i class="fa-solid fa-trash"></i></span>
+                            <span class="button square" title="Delete redirection"><i
+                                    class="fa-solid fa-trash"></i></span>
+                        </div>
                     </div>
                 </div>
                 <span class="button"><i class="fa-solid fa-plus"></i> New redirection</span>
@@ -99,6 +106,10 @@
                         <span class="link">link.domain.com</span>
                         to
                         <span class="link">redirected.app</span>
+                    </p>
+                    <p>
+                        You should be able to find this in your DNS provider's settings.<br />
+                        <a href="#">https://google.com</a>
                     </p>
                 </div>
                 <span class="button">Check DNS</span>
