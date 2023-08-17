@@ -6,6 +6,7 @@
     --color-primary: hsl(0, 74%, 49%);
     --color-primary-lite: hsla(0, 74%, 49%, 80%);
     --color-primary-liter: hsla(0, 74%, 49%, 50%);
+    --color-primary-litest: hsla(0, 74%, 49%, 25%);
 
     --color-content: hsl(60, 18%, 90%);
     --color-content-lite: hsla(60, 18%, 90%, 80%);
@@ -21,6 +22,7 @@
     --length-gap-l: 24px;
     --length-gap-xl: 32px;
     --length-gap-xxl: 48px;
+    --length-gap-xxxl: 64px;
 
     --length-padding-s: 8px;
     --length-padding-m: 16px;
@@ -54,7 +56,7 @@ body {
     padding: var(--length-padding-xl);
     display: flex;
     flex-direction: column;
-    gap: var(--length-gap-xxl);
+    gap: var(--length-gap-xxxl);
 }
 
 header {
@@ -71,11 +73,12 @@ header {
 form {
     display: flex;
     flex-direction: column;
-    gap: var(--length-gap-xl);
+    gap: var(--length-gap-xxl);
 
     .element {
         display: flex;
         gap: var(--length-gap-m);
+        position: relative;
 
         &.disabled {
             opacity: 0.5;
