@@ -36,6 +36,8 @@ body, html {
     background: var(--color-background);
     font-family: 'Raleway', sans-serif;
     color: var(--color-content);
+    overflow-x: hidden;
+    margin: 0;
 }
 
 h1 {
@@ -48,6 +50,7 @@ h1 {
 body {
     display: flex;
     justify-content: center;
+    position: relative;
 }
 
 .wrapper {
@@ -67,6 +70,29 @@ header {
     & p {
         margin: 0;
         font-size: 1.5rem;
+    }
+}
+
+.github {
+    position: absolute;
+    font-size: 4rem;
+    background: var(--color-primary);
+    width: 96px;
+    height: 96px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    top: -20px;
+    right: -20px;
+    transform: rotate(-20deg);
+    transition: transform 0.2s ease-in-out;
+    cursor: pointer;
+    color: var(--color-content);
+    text-decoration: none;
+
+    &:hover {
+        transform: rotate(-20deg) scale(1.2);
     }
 }
 
