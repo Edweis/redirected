@@ -1,210 +1,105 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <link href="./styles.css" rel="stylesheet" />
-  </head>
-  <body class="grid gap-8 p-2 max-w-2xl mx-auto">
-    <h1 class="text-5xl">Redirected.app</h1>
-    <p>Create a custom redirect in 2 minutes.</p>
+<head>
+    <link href="./styles.css" rel="stylesheet"/>
+</head>
+<body>
+<h1>Redirected.app</h1>
+<p>Create a custom redirect in 2 minutes.</p>
 
-    <form class="grid gap-8">
-      <article class="flex items-center">
-        <div class="inline text-5xl font-mono mr-4">1</div>
-        <div class="text-3xl flex whitespace-nowrap items-center gap-2">
-          My subdomain is
-          <input
-            class="shrink py-1 px-2 disabled:bg-gray-300"
-            required
-            type="text"
-            placeholder="link.domain.com"
-            name="domain"
-            autofocus
-          />
+<form>
+    <article>
+        <div>1</div>
+        <div>
+            My subdomain is
+            <input
+                    required
+                    type="text"
+                    placeholder="link.domain.com"
+                    name="domain"
+                    autofocus
+            />
         </div>
-      </article>
-      <article class="flex items-center">
-        <div class="inline text-5xl font-mono mr-4">2</div>
-        <div class="text-3xl">I want to redirect:</div>
-      </article>
-      <article class="grid gap-4">
+    </article>
+    <article>
+        <div>2</div>
+        <div>I want to redirect:</div>
+    </article>
+    <article>
         <table>
-          <tr>
-            <th></th>
-            <th class="text-left">From</th>
-            <th class="text-left">To URL</th>
-            <th></th>
-          </tr>
-          <tr id="form-row" class="group">
-            <td class="pre-url opacity-30 text-right">
-              https://link.domain.com/
-            </td>
-            <td>
-              <input
-                disabled
-                class="border py-1 px-2 rounded disabled:bg-gray-300"
-                required
-                type="text"
-                placeholder="events/meeting"
-                name="pathname"
-              />
-            </td>
-            <td>
-              <input
-                disabled
-                class="border py-1 px-2 rounded disabled:bg-gray-300"
-                required
-                type="url"
-                placeholder="https://..."
-                name="destination"
-              />
-            </td>
-            <td class="group-last:hidden">
-              <a class="underline" href="#" target="_blank">Open</a>
-              <button class="underline">Delete</button>
-            </td>
-          </tr>
+            <tr>
+                <th></th>
+                <th>From</th>
+                <th>To URL</th>
+                <th></th>
+            </tr>
+            <tr id="form-row">
+                <td>
+                    https://link.domain.com/
+                </td>
+                <td>
+                    <input
+                            disabled
+                            class="border py-1 px-2 rounded disabled:bg-gray-300"
+                            required
+                            type="text"
+                            placeholder="events/meeting"
+                            name="pathname"
+                    />
+                </td>
+                <td>
+                    <input
+                            disabled
+                            class="border py-1 px-2 rounded disabled:bg-gray-300"
+                            required
+                            type="url"
+                            placeholder="https://..."
+                            name="destination"
+                    />
+                </td>
+                <td class="group-last:hidden">
+                    <a href="#" target="_blank">Open</a>
+                    <button>Delete</button>
+                </td>
+            </tr>
         </table>
         <div>
-          <button
-            id="add-redirect"
-            class="border px-4 py-1 bg-orange-300 rounded disabled:opacity-70"
-          >
-            Add redirect
-          </button>
+            <button
+                    id="add-redirect"
+                    class="border px-4 py-1 bg-orange-300 rounded disabled:opacity-70"
+            >
+                Add redirect
+            </button>
         </div>
-      </article>
-      <article class="flex items-center">
-        <div class="inline text-5xl font-mono mr-4">3</div>
-        <div class="text-3xl">I update my DNS</div>
-      </article>
-      <article id="instr" style="display: none">
+    </article>
+    <article>
+        <div>3</div>
+        <div>I update my DNS</div>
+    </article>
+    <article id="instr" style="display: none">
         Add a CNAME record to link from
-        <pre id="instr-domain" class="inline font-bold">link.domain.com</pre>
+        <pre id="instr-domain">link.domain.com</pre>
         to
-        <pre class="inline font-bold">redirected.app</pre>
-      </article>
-      <div>
+        <pre>redirected.app</pre>
+    </article>
+    <div>
         <button
-          id="check-dns"
-          class="border px-4 py-1 bg-orange-300 rounded disabled:opacity-70"
+                id="check-dns"
+                class="border px-4 py-1 bg-orange-300 rounded disabled:opacity-70"
         >
-          Check the DNS
+            Check the DNS
         </button>
         <span id="dns-status"></span>
-      </div>
-    </form>
-
-    <div id="instr" style="display: none">
-      Add a CNAME record to link from
-      <pre id="instr-domain">link.domain.com</pre>
-      to
-      <pre>redirected.app</pre>
     </div>
+</form>
 
-    <script>
-      // constants
-      const IS_DEV = !window.location.host;
-      const API_BASE = IS_DEV ? "http://localhost:3000" : "";
-      const qEach = (query, fn) => document.querySelectorAll(query).forEach(fn);
-      const q = (query) => document.querySelector(query);
-      /** Hash a string. Implementation of Fowler-Noll-Vo (FNV) algorithm.
-       * Not to be used for cryptographic purpose. */
-      const simpleHash = (str) => {
-        const FNV_OFFSET_BASIS = 0x811c9dc5;
-        const FNV_PRIME = 0x01000193;
-        let hash = FNV_OFFSET_BASIS;
-        for (let i = 0; i < str.length; i += 1) {
-          hash *= FNV_PRIME;
-          hash ^= str.charCodeAt(i);
-        }
-        const hash32 = hash >>> 0;
-        return hash32.toString(36);
-      };
-      // listen to input change
-      const form = {};
-      qEach("form input", (input) => {
-        form[input.name] = input.value;
-        input.addEventListener("change", (e) => {
-          form[e.target.name] = e.target.value;
-        });
-      });
+<div id="instr" style="display: none">
+    Add a CNAME record to link from
+    <pre id="instr-domain">link.domain.com</pre>
+    to
+    <pre>redirected.app</pre>
+</div>
 
-      // variables
-      let listRedirects = [];
-
-      // STEP 1
-      function insertRedirect(pathname, destination) {
-        const template = q("#form-row");
-        const nextLine = template.cloneNode(true);
-
-        nextLine.id = "line-" + simpleHash(pathname, destination);
-        nextLine.querySelector("input[name=pathname]").parentNode.innerHTML =
-          pathname;
-        nextLine.querySelector("input[name=destination]").parentNode.innerHTML =
-          destination;
-        nextLine.querySelector("a").href =
-          "https://" + form.domain + "/" + pathname;
-        q("#" + nextLine.id)?.remove(); // remove existing before adding
-        template.parentNode.insertBefore(nextLine, template);
-      }
-      function fetchRedirects(domain) {
-        fetch(API_BASE + "/redirects/" + form.domain)
-          .then((r) => r.json())
-          .then((redirects) => {
-            const template = q("#form-row");
-            // remove existing rows
-            template.parentNode.childNodes.forEach(
-              (node, index) =>
-                index > 0 && node.id !== "form-row" && node.remove()
-            );
-            const nodes = (redirects || []).forEach((redirect) => {
-              insertRedirect(redirect.pathname, redirect.destination);
-            });
-          });
-      }
-
-      q("input[name=domain]").addEventListener("blur", () => {
-        const SUB_DOMAIN_REGEX =
-          /^(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,7}$/;
-        const isValid = SUB_DOMAIN_REGEX.test(form.domain);
-        const domainInput = q("input[name=domain]");
-        if (isValid) {
-          // event.target.disabled = true;
-          q("input[name=pathname]").disabled = false;
-          q("input[name=destination]").disabled = false;
-          q("input[name=pathname]").focus();
-          fetchRedirects(form.domain);
-          q("#instr-domain").innerHTML = form.domain;
-          q("#instr").style.display = "block";
-        } else {
-          domainInput.setCustomValidity("Your subdomain is not right...");
-          domainInput.reportValidity();
-          q("#instr").style.display = "none";
-        }
-      });
-
-      // STEP 2 - Create a redirect
-      q("#add-redirect").addEventListener("click", async (event) => {
-        event.preventDefault();
-        const body = JSON.stringify(form);
-        await fetch(API_BASE + "/redirects", { method: "POST", body });
-        insertRedirect(form.pathname, form.destination);
-        q("input[name=pathname]").value = "";
-        q("input[name=destination]").value = "";
-        q("input[name=pathname]").focus();
-      });
-
-      // STEP 3 - Check DNS
-      q("#check-dns").addEventListener("click", async (event) => {
-        event.preventDefault();
-        const body = JSON.stringify({ domain: form.domain });
-        q("#dns-status").innerHTML = "Loading ...";
-        const response = await fetch(API_BASE + "/dns", { method: "POST", body });
-        const { isValid } = await response.json();
-        q("#dns-status").innerHTML = isValid
-          ? "DNS is properly set"
-          : "DNS was not found";
-      });
-    </script>
-  </body>
+<script src="./script.js"></script>
+</body>
 </html>
