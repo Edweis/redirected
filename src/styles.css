@@ -224,7 +224,7 @@ form {
     gap: var(--length-gap-s);
     flex-direction: column;
 
-    p {
+    & p {
         margin: 0;
         line-height: 1.6rem;
 
@@ -232,7 +232,7 @@ form {
             font-weight: 700;
         }
 
-        a {
+        & a {
             color: var(--color-primary);
             text-decoration: none;
 
@@ -248,11 +248,11 @@ footer {
     justify-content: center;
     color: var(--color-content-litest);
 
-    p {
+    & p {
         text-align: center;
     }
 
-    a {
+    & a {
         color: var(--color-primary-liter);
         text-decoration: none;
 
