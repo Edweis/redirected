@@ -66,7 +66,9 @@ function insertRedirect(pathname, destination) {
 
     nextLine.id = "line-" + simpleHash(pathname);
     const pathInput = q("input[name=pathname]", nextLine);
-    pathInput.parentNode.innerHTML = `https://${form.domain}/${pathname}`
+    if(window.matchMedia("(min-width: 640px)").matches)
+        pathInput.parentNode.innerHTML = `https://${form.domain}/${pathname}`
+    else pathInput.parentNode.innerHTML = `/${pathname}`
     const destInput = q("input[name=destination]", nextLine)
     destInput.parentNode.innerHTML = destination;
     q("[data-copy]", nextLine).setAttribute('data-copy', `https://${form.domain}/${pathname}`)
@@ -102,7 +104,6 @@ function checkDomain() {
         /^(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,7}$/;
     const isValid = SUB_DOMAIN_REGEX.test(form.domain);
     if (isValid) {
-        // event.target.disabled = true;
         q("input[name=pathname]").disabled = false;
         q("input[name=destination]").disabled = false;
         q("input[name=pathname]").focus();

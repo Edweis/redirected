@@ -30,8 +30,6 @@
   --length-padding-xl: 48px;
 
   --lenght-radius-m: 32px;
-
-  --breakpoint-sm: 640px;
 }
 
 body,
@@ -46,9 +44,6 @@ h1 {
   color: var(--color-primary);
   font-weight: 700;
   font-size: 3rem;
-  @media (min-width: var(--breakpoint-sm)) {
-    font-size: 3.5rem;
-  }
   margin: 0;
 }
 
@@ -60,11 +55,8 @@ body {
 
 .wrapper {
   width: 100%;
-  /* max-width: 800px; */
-  padding:var(--length-padding-m) var(--length-padding-s);
-  @media (min-width: var(--breakpoint-sm)) {
-    padding: var(--length-padding-xl);
-  }
+  max-width: 800px;
+  padding: var(--length-padding-m) var(--length-padding-s);
   display: flex;
   flex-direction: column;
   gap: var(--length-gap-xxxl);
@@ -94,17 +86,6 @@ header {
   text-decoration: none;
   display: block;
   margin: auto;
-  @media (min-width: var(--breakpoint-sm)) {
-    left: auto;
-    top: -16px;
-    right: -16px;
-    transform: rotate(-20deg);
-    position: absolute;
-    &:hover {
-      transform: rotate(-20deg) scale(1.2);
-    }
-  };
-
 }
 
 form {
@@ -117,9 +98,6 @@ form {
     gap: var(--length-gap-m);
     position: relative;
     flex-direction: column;
-    @media (min-width: var(--breakpoint-sm)) {
-      flex-direction: row;
-    }
 
     &.disabled {
       opacity: 0.5;
@@ -127,10 +105,6 @@ form {
     }
 
     .title {
-      @media (min-width: var(--breakpoint-sm)) {
-        flex: 0 0 196px;
-      }
-
       & h2 {
         margin: 0;
         color: var(--color-primary);
@@ -139,9 +113,6 @@ form {
         height: 42px;
         display: flex;
         align-items: center;
-        @media (min-width: var(--breakpoint-sm)) {
-          justify-content: flex-end;
-        }
       }
 
       & p {
@@ -149,9 +120,6 @@ form {
         font-size: 0.9rem;
         color: var(--color-content-litest);
         transition: color 0.2s ease-in-out;
-        @media (min-width: var(--breakpoint-sm)) {
-          text-align: right;
-        }
       }
     }
 
@@ -209,11 +177,7 @@ form {
   color: var(--color-primary);
 }
 .content:not([aria-selected]) button[data-copy] {
-  cursor: not-allowed;
-  &:hover{
-    background-color: var(--color-content-soft);
-    color: var(--color-content)
-  }
+  display: none;
 }
 
 .redirection {
@@ -324,4 +288,39 @@ footer {
       text-decoration: underline;
     }
   }
+}
+.redirection:not(:last-of-type) .line:first-child .prefix {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .github {
+    left: auto;
+    top: -16px;
+    right: -16px;
+    transform: rotate(-20deg);
+    position: absolute;
+    &:hover {
+      transform: rotate(-20deg) scale(1.2);
+    }
+  }
+  h1 {
+    font-size: 3.5rem;
+  }
+  .wrapper {
+    padding: var(--length-padding-xl);
+  }
+  form .element {
+    flex-direction: row;
+  }
+  form .element .title {
+    flex: 0 0 196px;
+  }
+  form .element .title h2 {
+    justify-content: flex-end;
+  }
+  form .element .title p {
+    text-align: right;
+  }
+  
 }
