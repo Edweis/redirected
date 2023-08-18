@@ -3,8 +3,7 @@ import { db } from "../lib/database.js";
 
 export const forwardLink: Middleware = async (ctx, next) => {
   const domain = ctx.request.hostname
-  if (domain === 'redirected.app') return next()
-  if (domain === 'lcoalhost') return next()
+  if (domain === 'localhost') return next()
 
   const pathname = ctx.url.replace(/^\//, '');
   console.log('Forwarding ', { domain, pathname })

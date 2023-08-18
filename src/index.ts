@@ -26,8 +26,6 @@ app.use(wellKnownForCerts);
 app.use(cssFile);
 app.use(jsFile);
 
-// forward from custom URL to destination
-app.use(forwardLink)
 
 // Api
 app.use(health)
@@ -36,6 +34,8 @@ app.use(redirectPost)
 app.use(redirectDelete)
 app.use(dnsCheckPost)
 
+// forward from custom URL to destination
+app.use(forwardLink)
 
 // HTTP server
 const HTTP_PORT = process.env.NODE_ENV === 'production' ? 80 : 3000

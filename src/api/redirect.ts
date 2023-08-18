@@ -4,6 +4,7 @@ import { Redirect, RedirectNew, db } from '../lib/database.js'
 import { execPromise } from '../middlewares/helpers.js'
 import { hasCertificate } from './dns.js'
 
+const DISABLE_OUR_REDIRECT = false
 
 const schemaRedirectPut: yup.ObjectSchema<RedirectNew> = yup.object({
   domain: yup.string().required(),
@@ -13,6 +14,7 @@ const schemaRedirectPut: yup.ObjectSchema<RedirectNew> = yup.object({
 export const redirectPost: Middleware = async (ctx, next) => {
   if (ctx.path !== '/redirects' || ctx.method !== 'POST') return next()
   const { domain, pathname, destination } = schemaRedirectPut.validateSync(ctx.state.body)
+  if (DISABLE_OUR_REDIRECT && domain === 'redirected.app') { ctx.status = 401; return }
   await db.run(
     `INSERT INTO redirects (domain,  pathname, destination, deletedAt) 
       VALUES ($1, $2, $3, NULL)
@@ -33,7 +35,7 @@ export const redirectGet: Middleware = async (ctx, next) => {
     `SELECT * FROM redirects WHERE domain = $1 AND deletedAt IS NULL ORDER BY createdAt`,
     [domain]
   )
-  console.log('redirects found for '+domain, redirects.length, hasCertificate(domain))
+  console.log('redirects found for ' + domain, redirects.length, hasCertificate(domain))
   ctx.body = { redirects, isValid: hasCertificate(domain) }
 }
 
@@ -42,6 +44,8 @@ export const redirectDelete: Middleware = async (ctx, next) => {
   const match = /\/redirects\/([\w\.]+)\/(.+)/.exec(ctx.path)
   if (match == null || ctx.method !== 'DELETE') return next();
   const [, domain, pathname] = match;
+  if (DISABLE_OUR_REDIRECT && domain === 'redirected.app') { ctx.status = 401; return }
+
   await db.all(
     `UPDATE redirects SET deletedAt = datetime('now') 
       WHERE domain = $1 AND pathname = $2;`,
