@@ -44,6 +44,7 @@ qEach("form input", (input) => {
     form[input.name] = input.value;
     input.addEventListener("change", (e) => form[e.target.name] = e.target.value);
 });
+q('[name=destination]').addEventListener('input', e => e.target.value = e.target.value.replace(/^http?s:\/\//, ''))
 
 
 // STEP 1
