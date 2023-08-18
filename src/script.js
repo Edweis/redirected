@@ -78,7 +78,7 @@ function insertRedirect(pathname, destination) {
 function fetchRedirects(domain) {
     fetch(API_BASE + "/redirects/" + domain)
         .then((r) => r.json())
-        .then(({redirects, isValid}) => {
+        .then(({ redirects, isValid }) => {
             setDnsValid(isValid)
             const template = q("#line-template");
             // remove existing rows
@@ -161,5 +161,8 @@ q("#check-dns").addEventListener("click", async (e) => {
 // Copy to clipboard
 document.addEventListener('click', (e) => {
     const value = e.target.getAttribute('data-copy');
-    if (value) navigator.clipboard.writeText(value);
+    if (value) {
+        console.log('Copied to clipboard', value)
+        navigator.clipboard.writeText(value);
+    }
 }, false);
