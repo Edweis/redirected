@@ -4,7 +4,7 @@ import { Redirect, RedirectNew, db } from '../lib/database.js'
 import { execPromise } from '../middlewares/helpers.js'
 import { hasCertificate } from './dns.js'
 
-const DISABLE_OUR_REDIRECT = false
+const DISABLE_OUR_REDIRECT = true
 
 const schemaRedirectPut: yup.ObjectSchema<RedirectNew> = yup.object({
   domain: yup.string().required(),
