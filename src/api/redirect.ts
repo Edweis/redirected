@@ -2,6 +2,7 @@ import * as yup from 'yup'
 import { Middleware } from '../lib/types.js'
 import { Redirect, RedirectNew, db } from '../lib/database.js'
 import { execPromise } from '../middlewares/helpers.js'
+import { hasCertificate } from './dns.js'
 
 
 
@@ -34,9 +35,7 @@ export const redirectGet: Middleware = async (ctx, next) => {
     `SELECT * FROM redirects WHERE domain = $1 AND deletedAt IS NULL ORDER BY createdAt`,
     [domain]
   )
-  const dnsCheck = await db.get<{ isValid: true }>(`SELECT isValid FROM dns WHERE domain = $1`, [domain])
-  console.log('DNS check', {dnsCheck})
-  ctx.body = {redirects, isValid: dnsCheck?.isValid || false}
+  ctx.body = { redirects, isValid: hasCertificate(domain) }
 }
 
 
