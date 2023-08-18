@@ -111,12 +111,26 @@ function checkDomain() {
         qEach("[data-domain]", i => i.innerHTML = form.domain)
         q("#instr").style.display = "block";
     } else {
+        if(form.domain)
         inputError("input[name=domain]", "Your subdomain is not right...");
         q("#instr").style.display = "none";
     }
 }
 checkDomain()
 q("input[name=domain]").addEventListener("blur", checkDomain);
+q("input[name=domain]").addEventListener("keypress", e =>{
+    if(e.keyCode ===13) q("input[name=pathname]").focus() // focus on next input
+})
+q("input[name=pathname]").addEventListener("keypress", e =>{
+    if(e.keyCode ===13) q("input[name=destination]").focus()
+})
+q("input[name=destination]").addEventListener("keypress", e =>{
+    if(e.keyCode ===13){
+        q("#add-redirect").click();
+        q("input[name=pathname]").focus()
+    }
+})
+
 
 // STEP 2 - Create a redirect
 q("#add-redirect").addEventListener("click", async (event) => {

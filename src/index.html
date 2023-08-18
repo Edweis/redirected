@@ -47,7 +47,7 @@
         <h1>Redirected.app</h1>
         <p>Create a custom redirect in 2 minutes.</p>
       </header>
-      <form>
+      <form action="#">
         <div class="element" id="subdomain">
           <div class="title">
             <h2>1. Subdomain</h2>
@@ -55,7 +55,16 @@
           </div>
           <div class="content">
             <label class="input">
-              <input type="text" name="domain" autofocus />
+              <input
+                type="url"
+                name="domain"
+                autofocus
+                placeholder="link.domain.com"
+                pattern="[a-z\-.]"
+                autocapitalize="false"
+                autocomplete="false"
+                tabindex="1"
+              />
             </label>
           </div>
         </div>
@@ -72,7 +81,7 @@
                   <span class="prefix"
                     >https://<span data-domain>link.domain.com</span>/</span
                   >
-                  <input type="text" name="pathname" />
+                  <input name="pathname" type="url" tabindex="2" />
                 </label>
                 <div class="options">
                   <button
@@ -98,9 +107,10 @@
                 <label class="input"
                   ><span class="prefix"> https:// </span>
                   <input
-                    type="text"
+                    type="url"
                     placeholder="calendly.com/awesome/1-hour"
                     name="destination"
+                    tabindex="3"
                   />
                 </label>
               </div>
@@ -139,7 +149,7 @@
           Made with 💛 by
           <a href="https://redirected.app/github/francois" target="_blank"
             >François</a
-          > 
+          >
           & <a href="https://redirected.app/github/hugo" target="_blank">Hugo</a
           ><br />
           Looking for analytics on your links?
