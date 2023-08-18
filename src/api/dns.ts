@@ -7,11 +7,11 @@ import mem from 'mem';
 import { execPromise } from '../middlewares/helpers.js'
 import { db } from '../lib/database.js'
 
-const isProd = process.env.NODE_ENV==='production'
+const isProd = process.env.NODE_ENV === 'production'
 const certPath = `${projectRoot()}/../certs/live`
 
 const getCname = mem(
-  async (domain: string) =>  execPromise(`dig ${domain} cname +trace +short`),
+  async (domain: string) => execPromise(`dig ${domain} cname +trace +short`),
   { maxAge: 1000 }
 )
 const hasCertificate = (domain: string) => fs.existsSync(`${certPath}/${domain}/fullchain.pem`)
@@ -33,10 +33,10 @@ export const dnsCheckPost: Middleware = async (ctx, next) => {
   console.log('DNS for ', { domain, cnameDomaines })
   const isValid = cnameDomaines.includes('redirected.app')
   ctx.body = { isValid }
-  if (isValid && isProd && !hasCertificate(domain)){ 
-    await createCertificate(domain)
+  if (isValid && !hasCertificate(domain)) {
+    if (isProd) await createCertificate(domain)
     await db.run(
-      `INSERT INTO dns (domain, isValid, createdAt) VALUES ($1, TRUE, NULL)`,
+      `INSERT INTO dns (domain, isValid) VALUES ($1, TRUE)`,
       [domain]
     )
   }

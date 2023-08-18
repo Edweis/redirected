@@ -144,6 +144,7 @@ function setDnsValid(isValid) {
         q("#check-dns").disabled = false
         q("#check-dns").innerHTML = "DNS not set. Check again ?"
         q("#check-dns").removeAttribute('aria-selected');
+        q('#redirection-content').removeAttribute('aria-selected')
     }
 }
 q("#check-dns").addEventListener("click", async (e) => {
