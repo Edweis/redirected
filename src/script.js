@@ -13,10 +13,10 @@ const RANDOM_PLACEHOLDERS = [
     { pathname: 'contracts/marcus', destination: 'docs.google.com/document/d/NeoxZKeDCK27XWjc/edit' },
     { pathname: 'facebook', destination: 'facebook.com/redirected-app' },
     { pathname: 'instagram', destination: 'instagram.com/redirected-app' },
-    { pathname: 'twitter', destination: 'https://twitter.com/redirected-app' },
+    { pathname: 'twitter', destination: 'twitter.com/redirected-app' },
     { pathname: 'elastic', destination: 'redirected-app.kb.ap-southeast-1.aws.found.io:9243' },
-    { pathname: 'company', destination: 'Garnet Marketplace' },
-    { pathname: 'hn', destination: 'https://news.ycombinator.com/user?id=redirected' },
+    { pathname: 'company', destination: 'garnet.center' },
+    { pathname: 'hn', destination: 'news.ycombinator.com/user?id=redirected' },
 ].sort(() => Math.random() - 0.5)
 function* _genPlaceholders() {
     for (const item of RANDOM_PLACEHOLDERS) yield item;
