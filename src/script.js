@@ -41,9 +41,7 @@ const MATCH_URL = /^(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFF
 const form = {};
 qEach("form input", (input) => {
     form[input.name] = input.value;
-    input.addEventListener("change", (e) => {
-        form[e.target.name] = e.target.value;
-    });
+    input.addEventListener("change", (e) => form[e.target.name] = e.target.value );
 });
 
 
