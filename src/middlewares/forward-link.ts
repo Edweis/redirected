@@ -6,16 +6,16 @@ export const forwardLink: Middleware = async (ctx, next) => {
   if (domain === 'localhost') return next()
 
   const pathname = ctx.url.replace(/^\//, '');
-  console.log('Forwarding ', { domain, pathname })
   const response = await db.get<{ destination: string }>(
-    'SELECT destination FROM redirects WHERE domain = $1 AND pathname = $2 AND deletedAt IS NOT NULL',
+    'SELECT destination FROM redirects WHERE domain = $1 AND pathname = $2 AND deletedAt IS NULL',
     [domain, pathname]
-  )
-  await db.run(
-    `INSERT INTO travels (domain, pathname, destination, ip) 
-                  VALUES ($1, $2, $3, $4)`,
-    [domain, pathname, response?.destination, ctx.ip]
-  )
+    )
+    await db.run(
+      `INSERT INTO travels (domain, pathname, destination, ip) 
+      VALUES ($1, $2, $3, $4)`,
+      [domain, pathname, response?.destination, ctx.ip]
+      )
+      console.log('Forwarding ', { domain, pathname,  }, response?.destination)
   if (response == null) return ctx.redirect('https://redirected.app')
   console.log('Redirecting from ' + domain + '/' + pathname + ' to ' + response.destination);
   ctx.redirect(response.destination)

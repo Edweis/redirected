@@ -38,7 +38,7 @@ export const redirectGet: Middleware = async (ctx, next) => {
     `SELECT * FROM redirects WHERE domain = $1 AND deletedAt IS NULL ORDER BY createdAt`,
     [domain]
   )
-  console.log('redirects found for ' + domain, redirects.length, hasCertificate(domain))
+  console.log('redirects found for ' + domain, redirects.map(r => r.pathname), hasCertificate(domain))
   ctx.body = { redirects, isValid: hasCertificate(domain) }
 }
 

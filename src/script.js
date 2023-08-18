@@ -43,7 +43,7 @@ const MATCH_URL = /^(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFF
 const form = {};
 qEach("form input", (input) => {
     form[input.name] = input.value;
-    input.addEventListener("change", (e) => form[e.target.name] = e.target.value);
+    input.addEventListener("keypress", (e) => form[e.target.name] = e.target.value);
 });
 q('[name=destination]').addEventListener('input', e => e.target.value = e.target.value.replace(/^http?s:\/\//, ''))
 
@@ -66,7 +66,7 @@ function insertRedirect(pathname, destination) {
 
     nextLine.id = "line-" + simpleHash(pathname);
     const pathInput = q("input[name=pathname]", nextLine);
-    if(window.matchMedia("(min-width: 640px)").matches)
+    if (window.matchMedia("(min-width: 640px)").matches)
         pathInput.parentNode.innerHTML = `https://${form.domain}/${pathname}`
     else pathInput.parentNode.innerHTML = `/${pathname}`
     const destInput = q("input[name=destination]", nextLine)
@@ -111,34 +111,30 @@ function checkDomain() {
         qEach("[data-domain]", i => i.innerHTML = form.domain)
         q("#instr").style.display = "block";
     } else {
-        if(form.domain)
-        inputError("input[name=domain]", "Your subdomain is not right...");
+        if (form.domain)
+            inputError("input[name=domain]", "Your subdomain is not right...");
         q("#instr").style.display = "none";
     }
 }
 checkDomain()
 q("input[name=domain]").addEventListener("blur", checkDomain);
-q("input[name=domain]").addEventListener("keypress", e =>{
-    if(e.keyCode ===13) q("input[name=pathname]").focus() // focus on next input
+q("input[name=domain]").addEventListener("keypress", e => {
+    if (e.keyCode === 13) q("input[name=pathname]").focus() // focus on next input
 })
-q("input[name=pathname]").addEventListener("keypress", e =>{
-    if(e.keyCode ===13) q("input[name=destination]").focus()
+q("input[name=pathname]").addEventListener("keypress", e => {
+    if (e.keyCode === 13) q("input[name=destination]").focus()
 })
-q("input[name=destination]").addEventListener("keypress", e =>{
-    if(e.keyCode ===13){
-        q("#add-redirect").click();
-        q("input[name=pathname]").focus()
-    }
+q("input[name=destination]").addEventListener("keypress", e => {
+    if (e.keyCode === 13) addRedirect()
 })
 
 
 // STEP 2 - Create a redirect
-q("#add-redirect").addEventListener("click", async (event) => {
-    event.preventDefault();
+async function addRedirect() {
     if (!form.pathname || form.pathname[0] === '/')
         return inputError("input[name=pathname]", "Invalid pathname");
     if (!form.destination || !MATCH_URL.test(form.destination))
-        return inputError("input[name=destination]", "Invalid URL");
+        return inputError("input[name=destination]", "Invalid URL: " + form.destination);
 
     const body = JSON.stringify(form);
     await fetch(API_BASE + "/redirects", { method: "POST", body });
@@ -146,6 +142,10 @@ q("#add-redirect").addEventListener("click", async (event) => {
     q("input[name=pathname]").value = "";
     q("input[name=destination]").value = "";
     q("input[name=pathname]").focus();
+}
+q("#add-redirect").addEventListener("click", async (event) => {
+    event.preventDefault();
+    addRedirect()
 });
 
 
@@ -176,7 +176,7 @@ q("#check-dns").addEventListener("click", async (e) => {
 
 // Copy to clipboard
 document.addEventListener('click', (e) => {
-    const value = e.target.getAttribute('data-copy') ||  e.target.parentNode.getAttribute('data-copy');
+    const value = e.target.getAttribute('data-copy') || e.target.parentNode.getAttribute('data-copy');
     if (value) {
         console.log('Copied to clipboard', value)
         navigator.clipboard.writeText(value);
