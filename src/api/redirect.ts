@@ -4,7 +4,7 @@ import { Redirect, RedirectNew, db } from '../lib/database.js'
 import { execPromise } from '../middlewares/helpers.js'
 import { hasCertificate } from './dns.js'
 
-const DISABLE_OUR_REDIRECT = true
+const DISABLE_OUR_REDIRECT = false
 
 const schemaRedirectPut: yup.ObjectSchema<RedirectNew> = yup.object({
   domain: yup.string().required(),
@@ -15,12 +15,15 @@ export const redirectPost: Middleware = async (ctx, next) => {
   if (ctx.path !== '/redirects' || ctx.method !== 'POST') return next()
   const { domain, pathname, destination } = schemaRedirectPut.validateSync(ctx.state.body)
   if (DISABLE_OUR_REDIRECT && domain === 'redirected.app') { ctx.status = 401; return }
+  console.log('Adding ', { domain, pathname, destination })
   await db.run(
     `INSERT INTO redirects (domain,  pathname, destination, deletedAt) 
       VALUES ($1, $2, $3, NULL)
       ON CONFLICT(domain, pathname) DO UPDATE SET
         destination = $3,
-        createdAt = datetime('now');`,
+        createdAt = datetime('now'),
+        deletedAt = NULL
+        ;`,
     [domain, pathname, destination]
   )
   ctx.body = undefined
