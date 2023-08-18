@@ -1,4 +1,4 @@
-// constants
+/* Constants and helpers */
 const IS_DEV = !window.location.host;
 const API_BASE = IS_DEV ? "http://localhost:3000" : "";
 const qEach = (query, ctxOrFn, fn) => { (fn ? ctxOrFn : document).querySelectorAll(query).forEach(fn || ctxOrFn) };
@@ -15,10 +15,14 @@ const RANDOM_PLACEHOLDERS = [
     { pathname: 'instagram', destination: 'instagram.com/redirected-app' },
     { pathname: 'twitter', destination: 'https://twitter.com/redirected-app' },
     { pathname: 'elastic', destination: 'redirected-app.kb.ap-southeast-1.aws.found.io:9243' },
-]
+    { pathname: 'company', destination: 'Garnet Marketplace' },
+].sort(() => Math.random() - 0.5)
+function* _genPlaceholders() {
+    for (const item of RANDOM_PLACEHOLDERS) yield item;
+}
+const genPlaceholders = _genPlaceholders()
 
-/** Hash a string. Implementation of Fowler-Noll-Vo (FNV) algorithm.
- * Not to be used for cryptographic purpose. */
+/** Hash a string. Implementation of Fowler-Noll-Vo (FNV) algorithm. */
 const simpleHash = (str) => {
     const FNV_OFFSET_BASIS = 0x811c9dc5;
     const FNV_PRIME = 0x01000193;
@@ -30,7 +34,10 @@ const simpleHash = (str) => {
     const hash32 = hash >>> 0;
     return hash32.toString(36);
 };
-// listen to input change
+// @see https://github.com/jquense/yup/blob/master/src/string.ts#L25C1-L25C1196
+const MATCH_URL = /^(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i;
+
+/* Interactions */
 const form = {};
 qEach("form input", (input) => {
     form[input.name] = input.value;
@@ -41,6 +48,12 @@ qEach("form input", (input) => {
 
 
 // STEP 1
+function refreshPlaceholders() {
+    const placeholders = genPlaceholders.next().value
+    q('#line-template input[name=pathname]').placeholder = placeholders.pathname
+    q('#line-template input[name=destination]').placeholder = placeholders.destination
+}
+refreshPlaceholders() // set placeholders on load
 function rmRedirect(pathname) {
     const path = form.domain + '/' + pathname
     fetch(API_BASE + "/redirects/" + path, { method: 'DELETE' });
@@ -58,8 +71,8 @@ function insertRedirect(pathname, destination) {
     q("[data-copy]", nextLine).setAttribute('data-copy', `https://${form.domain}/${pathname}`)
     q("[data-remove]", nextLine).addEventListener('click', () => rmRedirect(pathname))
     q("#" + nextLine.id)?.remove(); // remove existing before adding
-    console.log({ nextLine, pathname, destination, pathInput })
     template.parentNode.insertBefore(nextLine, template);
+    refreshPlaceholders()
 }
 
 function fetchRedirects(domain) {
@@ -78,7 +91,10 @@ function fetchRedirects(domain) {
             });
         });
 }
-
+function inputError(query, error) {
+    q(query).setCustomValidity(error);
+    q(query).reportValidity();
+}
 function checkDomain() {
     const SUB_DOMAIN_REGEX =
         /^(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,7}$/;
@@ -93,8 +109,7 @@ function checkDomain() {
         qEach("[data-domain]", i => i.innerHTML = form.domain)
         q("#instr").style.display = "block";
     } else {
-        domainInput.setCustomValidity("Your subdomain is not right...");
-        domainInput.reportValidity();
+        inputError("input[name=domain]", "Your subdomain is not right...");
         q("#instr").style.display = "none";
     }
 }
@@ -104,6 +119,11 @@ q("input[name=domain]").addEventListener("blur", checkDomain);
 // STEP 2 - Create a redirect
 q("#add-redirect").addEventListener("click", async (event) => {
     event.preventDefault();
+    if (!form.pathname || form.pathname[0] === '/')
+        return inputError("input[name=pathname]", "Invalid pathname");
+    if (!form.destination || !MATCH_URL.test(form.destination))
+        return inputError("input[name=destination]", "Invalid URL");
+
     const body = JSON.stringify(form);
     await fetch(API_BASE + "/redirects", { method: "POST", body });
     insertRedirect(form.pathname, `https://${form.destination}`);
