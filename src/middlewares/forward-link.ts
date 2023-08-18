@@ -14,10 +14,7 @@ export const forwardLink: Middleware = async (ctx, next) => {
   )
   await db.run(
     `INSERT INTO travels (domain, pathname, destination, ip) 
-      VALUES ($1, $2, $3, $4)
-      ON CONFLICT(domain, pathname) DO UPDATE SET
-        destination = $3,
-        createdAt = datetime('now');`,
+                  VALUES ($1, $2, $3, $4)`,
     [domain, pathname, response?.destination, ctx.ip]
   )
   if (response == null) return ctx.redirect('https://redirected.app')
