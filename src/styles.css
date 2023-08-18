@@ -258,6 +258,10 @@ button {
     background: var(--color-primary);
     color: var(--color-background);
   }
+  &:active {
+    background: var(--color-primary-lite);
+    color: var(--color-background);
+  }
 }
 
 .instructions {
