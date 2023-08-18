@@ -17,7 +17,7 @@ export const initDb = async () => {
   await db.exec(`CREATE TABLE IF NOT EXISTS travels (
                   domain TEXT NOT NULL, 
                   pathname TEXT NOT NULL, 
-                  destination TEXT NOT NULL, 
+                  destination TEXT, 
                   ip TEXT NOT NULL,
                   createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                   PRIMARY KEY (domain, pathname, createdAt)
