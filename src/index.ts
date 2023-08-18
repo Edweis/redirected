@@ -5,7 +5,7 @@ import https from 'https';
 import { health } from './api/health.js';
 import { bodyParser, errorHandler, forceHttps, initDb, limiter, log } from './middlewares/helpers.js';
 import { redirectDelete, redirectGet, redirectPost } from './api/redirect.js';
-import { cssFile, rootWebsite, wellKnownForCerts } from './middlewares/static.js';
+import { cssFile, jsFile, rootWebsite, wellKnownForCerts } from './middlewares/static.js';
 import { httpsOptions } from './middlewares/https-options.js';
 import { dnsCheckPost } from './api/dns.js';
 import { forwardLink } from './middlewares/forward-link.js';
@@ -24,6 +24,7 @@ app.use(forceHttps);
 app.use(rootWebsite);
 app.use(wellKnownForCerts);
 app.use(cssFile);
+app.use(jsFile);
 
 // forward from custom URL to destination
 app.use(forwardLink)

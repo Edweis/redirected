@@ -9,7 +9,7 @@ import { execPromise } from '../middlewares/helpers.js'
 const schemaRedirectPut: yup.ObjectSchema<RedirectNew> = yup.object({
   domain: yup.string().required(),
   pathname: yup.string().matches(/^\w/).required(),
-  destination: yup.string().url().required()
+  destination: yup.string().transform(u => 'https://' + u).url().required()
 }).required()
 export const redirectPost: Middleware = async (ctx, next) => {
   if (ctx.path !== '/redirects' || ctx.method !== 'POST') return next()
@@ -31,7 +31,7 @@ export const redirectGet: Middleware = async (ctx, next) => {
   if (domain == null || ctx.method !== 'GET') return next()
 
   const redirects = await db.all<Redirect[]>(
-    `SELECT * FROM redirects WHERE domain = $1 AND deletedAt IS NULL`,
+    `SELECT * FROM redirects WHERE domain = $1 AND deletedAt IS NULL ORDER BY createdAt`,
     [domain]
   )
   ctx.body = redirects
@@ -39,11 +39,14 @@ export const redirectGet: Middleware = async (ctx, next) => {
 
 
 export const redirectDelete: Middleware = async (ctx, next) => {
-  const domain = /\/redirects\/([\w\.]+)/.exec(ctx.path)?.[1]
-  if (domain == null || ctx.method !== 'DELETE') return next();
+  const match = /\/redirects\/([\w\.]+)\/(.+)/.exec(ctx.path)
+  console.log({match})
+  if (match == null || ctx.method !== 'DELETE') return next();
+  const [, domain, pathname] = match;
   await db.all(
-    `UPDATE your_table SET deletedAt = datetime('now') WHERE domain = $1;`,
-    [domain]
+    `UPDATE redirects SET deletedAt = datetime('now') 
+      WHERE domain = $1 AND pathname = $2;`,
+    [domain, pathname]
   )
   ctx.body = undefined;
 }

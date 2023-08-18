@@ -1,8 +1,22 @@
 // constants
 const IS_DEV = !window.location.host;
 const API_BASE = IS_DEV ? "http://localhost:3000" : "";
-const qEach = (query, fn) => document.querySelectorAll(query).forEach(fn);
-const q = (query) => document.querySelector(query);
+const qEach = (query, ctxOrFn, fn) => { (fn ? ctxOrFn : document).querySelectorAll(query).forEach(fn || ctxOrFn) };
+const q = (query, ctx) => (ctx || document).querySelector(query);
+
+const RANDOM_PLACEHOLDERS = [
+    { pathname: 'meeting', destination: 'calendly.com/awesome/1-hour' },
+    { pathname: 'github', destination: 'github.com/edweis' },
+    { pathname: 'linkedin', destination: 'linkedin.com/in/frulliere/' },
+    { pathname: 'telegram', destination: 't.me/francoisrulliere' },
+    { pathname: 'whatsapp', destination: 'wa.me/6589595402' },
+    { pathname: 'contracts/marcus', destination: 'docs.google.com/document/d/NeoxZKeDCK27XWjc/edit' },
+    { pathname: 'facebook', destination: 'facebook.com/redirected-app' },
+    { pathname: 'instagram', destination: 'instagram.com/redirected-app' },
+    { pathname: 'twitter', destination: 'https://twitter.com/redirected-app' },
+    { pathname: 'elastic', destination: 'redirected-app.kb.ap-southeast-1.aws.found.io:9243' },
+]
+
 /** Hash a string. Implementation of Fowler-Noll-Vo (FNV) algorithm.
  * Not to be used for cryptographic purpose. */
 const simpleHash = (str) => {
@@ -25,42 +39,47 @@ qEach("form input", (input) => {
     });
 });
 
-// variables
-let listRedirects = [];
 
 // STEP 1
+function rmRedirect(pathname) {
+    const path = form.domain + '/' + pathname
+    fetch(API_BASE + "/redirects/" + path, { method: 'DELETE' });
+    q("#line-" + simpleHash(pathname))?.remove();
+}
 function insertRedirect(pathname, destination) {
-    const template = q("#form-row");
+    const template = q("#line-template");
     const nextLine = template.cloneNode(true);
 
-    nextLine.id = "line-" + simpleHash(pathname, destination);
-    nextLine.querySelector("input[name=pathname]").parentNode.innerHTML =
-        pathname;
-    nextLine.querySelector("input[name=destination]").parentNode.innerHTML =
-        destination;
-    nextLine.querySelector("a").href =
-        "https://" + form.domain + "/" + pathname;
+    nextLine.id = "line-" + simpleHash(pathname);
+    const pathInput = q("input[name=pathname]", nextLine);
+    pathInput.parentNode.innerHTML = `https://${form.domain}/${pathname}`
+    const destInput = q("input[name=destination]", nextLine)
+    destInput.parentNode.innerHTML = destination;
+    q("[data-copy]", nextLine).setAttribute('data-copy', `https://${form.domain}/${pathname}`)
+    q("[data-remove]", nextLine).addEventListener('click', () => rmRedirect(pathname))
     q("#" + nextLine.id)?.remove(); // remove existing before adding
+    console.log({ nextLine, pathname, destination, pathInput })
     template.parentNode.insertBefore(nextLine, template);
 }
 
 function fetchRedirects(domain) {
-    fetch(API_BASE + "/redirects/" + form.domain)
+    fetch(API_BASE + "/redirects/" + domain)
         .then((r) => r.json())
         .then((redirects) => {
-            const template = q("#form-row");
+            const template = q("#line-template");
             // remove existing rows
-            template.parentNode.childNodes.forEach(
-                (node, index) =>
-                    index > 0 && node.id !== "form-row" && node.remove()
+            qEach(
+                '.redirection:not(#line-template)',
+                template.parentNode,
+                (node) => node.remove()
             );
-            const nodes = (redirects || []).forEach((redirect) => {
+            (redirects || []).forEach((redirect) => {
                 insertRedirect(redirect.pathname, redirect.destination);
             });
         });
 }
 
-q("input[name=domain]").addEventListener("blur", () => {
+function checkDomain() {
     const SUB_DOMAIN_REGEX =
         /^(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,7}$/;
     const isValid = SUB_DOMAIN_REGEX.test(form.domain);
@@ -71,34 +90,48 @@ q("input[name=domain]").addEventListener("blur", () => {
         q("input[name=destination]").disabled = false;
         q("input[name=pathname]").focus();
         fetchRedirects(form.domain);
-        q("#instr-domain").innerHTML = form.domain;
+        qEach("[data-domain]", i => i.innerHTML = form.domain)
         q("#instr").style.display = "block";
     } else {
         domainInput.setCustomValidity("Your subdomain is not right...");
         domainInput.reportValidity();
         q("#instr").style.display = "none";
     }
-});
+}
+checkDomain()
+q("input[name=domain]").addEventListener("blur", checkDomain);
 
 // STEP 2 - Create a redirect
 q("#add-redirect").addEventListener("click", async (event) => {
     event.preventDefault();
     const body = JSON.stringify(form);
-    await fetch(API_BASE + "/redirects", {method: "POST", body});
-    insertRedirect(form.pathname, form.destination);
+    await fetch(API_BASE + "/redirects", { method: "POST", body });
+    insertRedirect(form.pathname, `https://${form.destination}`);
     q("input[name=pathname]").value = "";
     q("input[name=destination]").value = "";
     q("input[name=pathname]").focus();
 });
 
+
+
 // STEP 3 - Check DNS
-q("#check-dns").addEventListener("click", async (event) => {
-    event.preventDefault();
-    const body = JSON.stringify({domain: form.domain});
-    q("#dns-status").innerHTML = "Loading ...";
-    const response = await fetch(API_BASE + "/dns", {method: "POST", body});
-    const {isValid} = await response.json();
-    q("#dns-status").innerHTML = isValid
-        ? "DNS is properly set"
-        : "DNS was not found";
+q("#check-dns").addEventListener("click", async (e) => {
+    e.preventDefault();
+    e.target.innerHTML = "Checking ...";
+    e.target.disabled = true;
+    const body = JSON.stringify({ domain: form.domain });
+    const response = await fetch(API_BASE + "/dns", { method: "POST", body });
+    const { isValid } = await response.json();
+    if (isValid) {
+        e.target.innerHTML = "DNS is properly set!"
+    } else {
+        e.target.disabled = false
+        e.target.innerHTML = "DNS not set. Check again ?"
+    }
 });
+
+// Copy to clipboard
+document.addEventListener('click', (e) => {
+    const value = e.target.getAttribute('data-copy');
+    if (value) navigator.clipboard.writeText(value);
+}, false);

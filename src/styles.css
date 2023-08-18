@@ -3,10 +3,10 @@
 :root {
   --color-background: hsl(60, 3%, 13%);
 
-  --color-primary: hsl(0, 74%, 49%);
-  --color-primary-lite: hsla(0, 74%, 49%, 80%);
-  --color-primary-liter: hsla(0, 74%, 49%, 50%);
-  --color-primary-litest: hsla(0, 74%, 49%, 25%);
+  --color-primary: hsl(55, 74%, 49%);
+  --color-primary-lite: hsla(55, 74%, 49%, 80%);
+  --color-primary-liter: hsla(55, 74%, 49%, 50%);
+  --color-primary-litest: hsla(55, 74%, 49%, 25%);
 
   --color-content: hsl(60, 18%, 90%);
   --color-content-lite: hsla(60, 18%, 90%, 80%);
@@ -140,6 +140,7 @@ form {
       display: flex;
       flex-direction: column;
       gap: var(--length-gap-s);
+      gap: 2rem;
     }
   }
 
@@ -149,7 +150,7 @@ form {
 }
 
 .input {
-  border: 3px solid var(--color-content-litest);
+  border: 2px solid var(--color-content-litest);
   border-radius: var(--lenght-radius-m);
   height: 42px;
   display: flex;
@@ -157,14 +158,11 @@ form {
   padding: 0 var(--length-padding-m);
   box-sizing: border-box;
   align-items: center;
-
-  .prefix {
-    color: var(--color-content-litest);
-  }
-
+  color: var(--color-content-litest);
+  
   & input {
+    color: var(--color-content-lite);
     margin: 0;
-    color: inherit;
     font-size: 1rem;
     font-family: inherit;
     padding: var(--length-padding-s) 0;
@@ -187,7 +185,6 @@ form {
   flex-direction: column;
   align-items: center;
   gap: var(--length-gap-s);
-
   .line {
     display: flex;
     align-items: center;
@@ -205,8 +202,23 @@ form {
   }
 }
 
+.content .redirection:last-of-type:not(:first-of-type):before {
+  border-top: 1px var(--color-primary-liter) solid;
+  width: 80%;
+  height: 3px;
+  content: "";
+  display: block;
+  margin-bottom: 1rem;
+}
+.content .redirection:last-of-type .options {
+  display: none;
+}
+
+
+
 button {
-    outline: none;
+  cursor: pointer;
+  outline: none;
   font-family: inherit;
   font-size: 100%;
   line-height: 1.15;
@@ -227,12 +239,12 @@ button {
 
   &:hover, &:focus-visible   {
     background: var(--color-primary);
+    color: var(--color-background)
   }
 }
 
 .instructions {
   display: flex;
-  gap: var(--length-gap-s);
   flex-direction: column;
 
   & p {

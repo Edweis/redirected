@@ -2,7 +2,7 @@
 const config = {
   plugins: [
     require('autoprefixer'),
-    require('postcss-nested')
+    require('postcss-nested'),
   ]
 }
 

@@ -36,7 +36,6 @@
           <div class="content">
             <label class="input">
               <input
-                required
                 type="text"
                 placeholder="link.domain.com"
                 name="domain"
@@ -51,46 +50,48 @@
             <p>Create as many redirections as you'd like.</p>
           </div>
           <div class="content">
-            <div class="redirection">
+            <div class="redirection" id="line-template">
               <div class="line">
                 From:
                 <label class="input">
-                  <span class="prefix">https://link.domain.com/ </span>
+                  <span class="prefix"
+                    >https://<span data-domain>link.domain.com</span>/</span>
                   <input
-                    class="from"
-                    required
                     type="text"
                     placeholder="meeting"
-                    name="domain"
-                    autofocus
+                    name="pathname"
                   />
                 </label>
+                <div class="options">
+                  <button
+                  type="button"
+                    class="square"
+                    data-copy
+                    title="Copy link to clipboard"
+                  >
+                    <i class="fa-solid fa-link"></i>
+                  </button>
+                  <button data-remove type="button" class="square" title="Delete redirection">
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </div>
               </div>
-
               <div class="line">
                 To:
                 <label class="input"
                   ><span class="prefix"> https:// </span>
                   <input
-                    class="to"
-                    required
                     type="text"
                     placeholder="calendly.com/awesome/1-hour"
-                    name="domain"
-                    autofocus
+                    name="destination"
                   />
                 </label>
-                <div class="options">
-                  <button class="square" title="Copy link to clipboard">
-                    <i class="fa-solid fa-link"></i>
-                  </button>
-                  <button class="square" title="Delete redirection">
-                    <i class="fa-solid fa-trash"></i>
-                  </button>
-                </div>
               </div>
             </div>
-            <button><i class="fa-solid fa-plus"></i> New redirection</button>
+
+            <button type="button" id="add-redirect">
+              <i class="fa-solid fa-plus"></i> New redirection
+            </button>
           </div>
         </div>
 
@@ -101,24 +102,23 @@
           </div>
           <div class="content">
             <div class="instructions">
-              <p>
-                Add a CNAME record to your DNS records:<br />
+              <p>Update your DNS by adding a CNAME record<br /></p>
+              <p id="instr" style="display: none">
                 from
-                <span class="link">link.domain.com</span>
+                <span class="link" data-domain>link.domain.com</span>
                 to
                 <span class="link">redirected.app</span>
               </p>
             </div>
-            <button>Check DNS</button>
-            <span id="dns-status"></span>
+            <button type="button" id="check-dns"><i class="fa-regular fa-eye"></i> Check DNS</button>
           </div>
         </div>
       </form>
 
       <footer>
         <p>
-          Made with ❤️ by
-          <a href="https://github.com/Edweis/" target="_blank">François</a> &
+          Made with 💛 by
+          <a href="https://github.com/edweis/" target="_blank">François</a> &
           <a href="https://github.com/hugoattal/" target="_blank">Hugo</a><br />
           Contact us @
           <a href="mailto:support@redirected.app">support@redirected.app</a>

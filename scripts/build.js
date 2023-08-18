@@ -10,8 +10,8 @@ const context = await esbuild.context({
   platform: 'node',
   logLevel: 'debug',
   format: 'esm',
-  entryPoints: ['src/**/*.ts', 'src/styles.css', 'src/index.html',],
-  loader: { '.html': 'copy' }, // Copy the HTML file to the output
+  entryPoints: ['src/**/*.ts', 'src/styles.css', 'src/index.html',  'src/script.js'],
+  loader: { '.html': 'copy', '.js': 'copy' }, // Copy the HTML file to the output
   plugins: [postCssPlugin()],
   banner: {
     // fix require import in ESM, @see https://github.com/evanw/esbuild/issues/1921#issuecomment-1403107887
