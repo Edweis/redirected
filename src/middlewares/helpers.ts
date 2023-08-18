@@ -43,6 +43,7 @@ export const bodyParser: Middleware = async (ctx, next) => {
 export const forceHttps: Middleware = async (ctx, next) => {
   if (ctx.path.startsWith('/.well-known/')) return next();
   if (ctx.protocol === 'https') return next()
+  if (ctx.hostname === 'localhost') return next()
   const nextUrl = new URL(ctx.URL);
   nextUrl.protocol = 'https'
   console.log('Redireting to ', nextUrl.toString())

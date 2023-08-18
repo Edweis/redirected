@@ -1,136 +1,131 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <title>Redirected App</title>
-    <link href="./styles.css" rel="stylesheet"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
-          integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
-          crossorigin="anonymous" referrerpolicy="no-referrer"/>
-    <meta charset="UTF-8">
-</head>
-<body>
-<div class="wrapper">
-    <header>
+    <link href="./styles.css" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+      integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
         <h1>Redirected.app</h1>
         <p>Create a custom redirect in 2 minutes.</p>
-    </header>
+      </header>
 
-    <a href="https://github.com/Edweis/redirected" target="_blank" class="github">
+      <a
+        href="https://github.com/Edweis/redirected"
+        target="_blank"
+        class="github"
+      >
         <i class="fa-brands fa-github"></i>
-    </a>
+      </a>
 
-    <form>
+      <form>
         <div class="element" id="subdomain">
-            <div class="title">
-                <h2>
-                    Subdomain
-                </h2>
-                <p>
-                    Enter your subdomain.
-                </p>
-            </div>
-            <div class="content">
-                <label class="input">
-                    <input
-                            required
-                            type="text"
-                            placeholder="link.domain.com"
-                            name="domain"
-                            autofocus
-                    />
-                </label>
-            </div>
+          <div class="title">
+            <h2>Subdomain</h2>
+            <p>Enter your subdomain.</p>
+          </div>
+          <div class="content">
+            <label class="input">
+              <input
+                required
+                type="text"
+                placeholder="link.domain.com"
+                name="domain"
+                autofocus
+              />
+            </label>
+          </div>
         </div>
         <div class="element" id="redirections">
-            <div class="title">
-                <h2>
-                    Redirections
-                </h2>
-                <p>
-                    Create as many redirections as you'd like.
-                </p>
-            </div>
-            <div class="content">
-                <div class="redirection">
-                    <div class="line">
-                        From:
-                        <label class="input">
-                        <span class="prefix">
-                        link.domain.com/
-                        </span>
-                            <input
-                                    class="from"
-                                    required
-                                    type="text"
-                                    placeholder="meeting"
-                                    name="domain"
-                                    autofocus
-                            />
-                        </label>
-                    </div>
+          <div class="title">
+            <h2>Redirections</h2>
+            <p>Create as many redirections as you'd like.</p>
+          </div>
+          <div class="content">
+            <div class="redirection">
+              <div class="line">
+                From:
+                <label class="input">
+                  <span class="prefix">https://link.domain.com/ </span>
+                  <input
+                    class="from"
+                    required
+                    type="text"
+                    placeholder="meeting"
+                    name="domain"
+                    autofocus
+                  />
+                </label>
+              </div>
 
-                    <div class="line">
-                        To:
-                        <label class="input">
-                            <input
-                                    class="to"
-                                    required
-                                    type="text"
-                                    placeholder="google.com"
-                                    name="domain"
-                                    autofocus
-                            />
-                        </label>
-                        <div class="options">
-                        <span class="button square" title="Copy link to clipboard"><i
-                                class="fa-solid fa-link"></i></span>
-                            <span class="button square" title="Delete redirection"><i
-                                    class="fa-solid fa-trash"></i></span>
-                        </div>
-                    </div>
+              <div class="line">
+                To:
+                <label class="input"
+                  ><span class="prefix"> https:// </span>
+                  <input
+                    class="to"
+                    required
+                    type="text"
+                    placeholder="calendly.com/awesome/1-hour"
+                    name="domain"
+                    autofocus
+                  />
+                </label>
+                <div class="options">
+                  <button class="square" title="Copy link to clipboard">
+                    <i class="fa-solid fa-link"></i>
+                  </button>
+                  <button class="square" title="Delete redirection">
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
                 </div>
-                <span class="button"><i class="fa-solid fa-plus"></i> New redirection</span>
+              </div>
             </div>
+            <button><i class="fa-solid fa-plus"></i> New redirection</button>
+          </div>
         </div>
 
         <div class="element" id="dns">
-            <div class="title">
-                <h2>
-                    DNS Check
-                </h2>
-                <p>
-                    Check if your DNS is properly configured.
-                </p>
+          <div class="title">
+            <h2>DNS Check</h2>
+            <p>Check if your DNS is properly configured.</p>
+          </div>
+          <div class="content">
+            <div class="instructions">
+              <p>
+                Add a CNAME record to your DNS records:<br />
+                from
+                <span class="link">link.domain.com</span>
+                to
+                <span class="link">redirected.app</span>
+              </p>
             </div>
-            <div class="content">
-                <div class="instructions">
-                    <p>
-                        Add a CNAME record to your DNS records:<br>
-                        from
-                        <span class="link">link.domain.com</span>
-                        to
-                        <span class="link">redirected.app</span>
-                    </p>
-                    <p>
-                        You should be able to find this in your DNS provider's settings.<br />
-                        <a href="#">https://google.com</a>
-                    </p>
-                </div>
-                <span class="button">Check DNS</span>
-                <span id="dns-status"></span>
-            </div>
+            <button>Check DNS</button>
+            <span id="dns-status"></span>
+          </div>
         </div>
-    </form>
+      </form>
 
-    <footer>
+      <footer>
         <p>
-            Made with a fuckton of ❤️ by <a href="https://github.com/Edweis/" target="_blank">François</a> & <a
-                href="https://github.com/hugoattal/" target="_blank">Hugo</a><br />
-            Contact us @ <a href="mailto:support@redirected.app">support@redirected.app</a>
+          Made with ❤️ by
+          <a href="https://github.com/Edweis/" target="_blank">François</a> &
+          <a href="https://github.com/hugoattal/" target="_blank">Hugo</a><br />
+          Contact us @
+          <a href="mailto:support@redirected.app">support@redirected.app</a>
         </p>
-    </footer>
-</div>
+      </footer>
+    </div>
 
-<script src="./script.js"></script>
-</body>
+    <script src="./script.js"></script>
+  </body>
 </html>

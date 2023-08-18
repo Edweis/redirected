@@ -9,7 +9,7 @@ const DEV_DOMAINS = !IS_PROD && await devcert.certificateFor(['localhost', 'redi
 const certDatabase = IS_PROD
   ? async (domain: string) => {
     const dir = `${projectRoot()}/../certs/live/${domain}`
-    console.log({dir})
+    console.log({ dir })
     return {
       key: fs.readFileSync(`${dir}/privkey.pem`),
       cert: fs.readFileSync(`${dir}/fullchain.pem`)
@@ -18,11 +18,9 @@ const certDatabase = IS_PROD
   : async () => DEV_DOMAINS // if this step is blocking, you probably need to type your password in the process to authorize the dev CA creation. @see https://github.com/davewasmer/devcert#how-it-works
 
 export const httpsOptions: https.ServerOptions = {
-  SNICallback(domain, cb) {
+  async SNICallback(domain, cb) {
     certDatabase(domain)
-      .then(cert => tls.createSecureContext(cert))
-      .then(ctx => cb(null, ctx))
-      .catch(err => cb(err, null))
+      .then(cert => cert && cb(null, tls.createSecureContext(cert)))
+      .catch(err => cb(err))
   },
 }
- 

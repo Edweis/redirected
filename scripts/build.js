@@ -1,8 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import esbuild from 'esbuild';
-import autoprefixer from "autoprefixer";
-import postCssPlugin from "@deanc/esbuild-plugin-postcss";
-import postCssNested from "postcss-nested";
+import postCssPlugin from "esbuild-postcss";
 const isWatch = process.argv.includes('--watch');
 
 const NODE_ENV = isWatch ? 'development' : 'production';
@@ -10,12 +8,11 @@ const context = await esbuild.context({
   outdir: 'dist',
   target: 'node18',
   platform: 'node',
+  logLevel: 'debug',
   format: 'esm',
-  entryPoints: ['src/**/*.ts', 'src/index.html', 'src/styles.css'],
+  entryPoints: ['src/**/*.ts', 'src/styles.css', 'src/index.html',],
   loader: { '.html': 'copy' }, // Copy the HTML file to the output
-  plugins: [
-    postCssPlugin({ plugins: [autoprefixer, postCssNested], }),
-  ],
+  plugins: [postCssPlugin()],
   banner: {
     // fix require import in ESM, @see https://github.com/evanw/esbuild/issues/1921#issuecomment-1403107887
     js: `import { createRequire } from 'module'; const require = createRequire(import.meta.url);`,
