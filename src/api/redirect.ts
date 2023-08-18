@@ -5,8 +5,6 @@ import { execPromise } from '../middlewares/helpers.js'
 import { hasCertificate } from './dns.js'
 
 
-
-
 const schemaRedirectPut: yup.ObjectSchema<RedirectNew> = yup.object({
   domain: yup.string().required(),
   pathname: yup.string().matches(/^\w/).required(),

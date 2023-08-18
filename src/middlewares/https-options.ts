@@ -9,7 +9,8 @@ const DEV_DOMAINS = !IS_PROD && await devcert.certificateFor(['localhost', 'redi
 const certDatabase = IS_PROD
   ? async (domain: string) => {
     const dir = `${projectRoot()}/../certs/live/${domain}`
-    console.log({ dir })
+    const exists = fs.existsSync(dir)
+    console.log({ domain, exists})
     return {
       key: fs.readFileSync(`${dir}/privkey.pem`),
       cert: fs.readFileSync(`${dir}/fullchain.pem`)

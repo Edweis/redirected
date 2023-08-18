@@ -7,7 +7,7 @@ import { execPromise } from '../middlewares/helpers.js'
 import { db } from '../lib/database.js'
 
 const isProd = process.env.NODE_ENV === 'production'
-const certPath = `${projectRoot()}/../certs/live`
+const certPath = `${projectRoot()}/../certs/archive`
 
 const getCname = mem(
   async (domain: string) => execPromise(`dig ${domain} cname +trace +short`),
