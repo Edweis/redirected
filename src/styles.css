@@ -159,7 +159,11 @@ form {
   box-sizing: border-box;
   align-items: center;
   color: var(--color-content-litest);
-  
+
+  &[aria-selected] {
+    color: var(--color-primary);
+  }
+
   & input {
     color: var(--color-content-lite);
     margin: 0;
@@ -177,6 +181,17 @@ form {
   &:focus-within {
     border-color: var(--color-primary);
     background: var(--color-content-soft);
+  }
+}
+
+.content[aria-selected] .redirection:not(:last-of-type) .input {
+  color: var(--color-primary);
+}
+.content:not([aria-selected]) button[data-copy] {
+  cursor: not-allowed;
+  &:hover{
+    background-color: var(--color-content-soft);
+    color: var(--color-content)
   }
 }
 
@@ -214,8 +229,6 @@ form {
   display: none;
 }
 
-
-
 button {
   cursor: pointer;
   outline: none;
@@ -236,10 +249,14 @@ button {
   &.square {
     width: 42px;
   }
-
-  &:hover, &:focus-visible   {
+  &[aria-selected] {
+    cursor: default;
+  }
+  &:hover,
+  &:focus-visible,
+  &[aria-selected] {
     background: var(--color-primary);
-    color: var(--color-background)
+    color: var(--color-background);
   }
 }
 

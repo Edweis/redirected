@@ -16,6 +16,7 @@ const RANDOM_PLACEHOLDERS = [
     { pathname: 'twitter', destination: 'https://twitter.com/redirected-app' },
     { pathname: 'elastic', destination: 'redirected-app.kb.ap-southeast-1.aws.found.io:9243' },
     { pathname: 'company', destination: 'Garnet Marketplace' },
+    { pathname: 'hn', destination: 'https://news.ycombinator.com/user?id=redirected' },
 ].sort(() => Math.random() - 0.5)
 function* _genPlaceholders() {
     for (const item of RANDOM_PLACEHOLDERS) yield item;
@@ -41,7 +42,7 @@ const MATCH_URL = /^(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFF
 const form = {};
 qEach("form input", (input) => {
     form[input.name] = input.value;
-    input.addEventListener("change", (e) => form[e.target.name] = e.target.value );
+    input.addEventListener("change", (e) => form[e.target.name] = e.target.value);
 });
 
 
@@ -76,7 +77,8 @@ function insertRedirect(pathname, destination) {
 function fetchRedirects(domain) {
     fetch(API_BASE + "/redirects/" + domain)
         .then((r) => r.json())
-        .then((redirects) => {
+        .then(({redirects, isValid}) => {
+            setDnsValid(isValid)
             const template = q("#line-template");
             // remove existing rows
             qEach(
@@ -97,7 +99,6 @@ function checkDomain() {
     const SUB_DOMAIN_REGEX =
         /^(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,7}$/;
     const isValid = SUB_DOMAIN_REGEX.test(form.domain);
-    const domainInput = q("input[name=domain]");
     if (isValid) {
         // event.target.disabled = true;
         q("input[name=pathname]").disabled = false;
@@ -133,6 +134,18 @@ q("#add-redirect").addEventListener("click", async (event) => {
 
 
 // STEP 3 - Check DNS
+function setDnsValid(isValid) {
+    if (isValid) {
+        q("#check-dns").innerHTML = "DNS is properly set!"
+        q("#check-dns").disabled = true
+        q("#check-dns").setAttribute('aria-selected', true);
+        q('#redirection-content').setAttribute('aria-selected', true)
+    } else {
+        q("#check-dns").disabled = false
+        q("#check-dns").innerHTML = "DNS not set. Check again ?"
+        q("#check-dns").removeAttribute('aria-selected');
+    }
+}
 q("#check-dns").addEventListener("click", async (e) => {
     e.preventDefault();
     e.target.innerHTML = "Checking ...";
@@ -140,12 +153,7 @@ q("#check-dns").addEventListener("click", async (e) => {
     const body = JSON.stringify({ domain: form.domain });
     const response = await fetch(API_BASE + "/dns", { method: "POST", body });
     const { isValid } = await response.json();
-    if (isValid) {
-        e.target.innerHTML = "DNS is properly set!"
-    } else {
-        e.target.disabled = false
-        e.target.innerHTML = "DNS not set. Check again ?"
-    }
+    setDnsValid(isValid);
 });
 
 // Copy to clipboard

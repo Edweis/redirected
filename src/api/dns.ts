@@ -5,6 +5,7 @@ import fs from 'fs'
 import { SUB_DOMAIN_REG, projectRoot } from '../lib/helpers.js'
 import mem from 'mem';
 import { execPromise } from '../middlewares/helpers.js'
+import { db } from '../lib/database.js'
 
 const isProd = process.env.NODE_ENV==='production'
 const certPath = `${projectRoot()}/../certs/live`
@@ -32,6 +33,12 @@ export const dnsCheckPost: Middleware = async (ctx, next) => {
   console.log('DNS for ', { domain, cnameDomaines })
   const isValid = cnameDomaines.includes('redirected.app')
   ctx.body = { isValid }
-  if (isValid && isProd && !hasCertificate(domain)) await createCertificate(domain)
+  if (isValid && isProd && !hasCertificate(domain)){ 
+    await createCertificate(domain)
+    await db.run(
+      `INSERT INTO dns (domain, isValid, createdAt) VALUES ($1, TRUE, NULL)`,
+      [domain]
+    )
+  }
 }
 

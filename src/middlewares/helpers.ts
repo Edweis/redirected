@@ -14,6 +14,12 @@ export const initDb = async () => {
                   deletedAt TIMESTAMP,
                   PRIMARY KEY (domain, pathname)
                 );`)
+  await db.exec(`CREATE TABLE IF NOT EXISTS dns (
+                  domain TEXT NOT NULL, 
+                  isValid BOOLEAN NOT NULL,
+                  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+                  PRIMARY KEY (domain)
+                );`)
   const count = await db.get<{ count: number }>('SELECT COUNT(*) as count FROM redirects');
   console.log('Redirect count: ' + count?.count)
 }
