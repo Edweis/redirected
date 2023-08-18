@@ -8,7 +8,7 @@ export const forwardLink: Middleware = async (ctx, next) => {
   const pathname = ctx.url.replace(/^\//, '');
   console.log('Forwarding ', { domain, pathname })
   const response = await db.get<{ destination: string }>(
-    'SELECT destination FROM redirects WHERE domain = $1 AND pathname = $2',
+    'SELECT destination FROM redirects WHERE domain = $1 AND pathname = $2 AND deletedAt IS NOT NULL',
     [domain, pathname]
   )
   await db.run(
