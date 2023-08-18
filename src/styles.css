@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=REM:wght@400;600&family=Raleway:wght@400;700&display=swap");
 
 :root {
-  --color-background: hsl(60, 3%, 13%);
+  --color-background: hsl(60, 1%, 13%);
 
   --color-primary: hsl(55, 74%, 49%);
   --color-primary-lite: hsla(55, 74%, 49%, 80%);

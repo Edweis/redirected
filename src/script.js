@@ -110,11 +110,15 @@ function checkDomain() {
         fetchRedirects(form.domain);
         qEach("[data-domain]", i => i.innerHTML = form.domain)
         q("#instr").style.display = "block";
+        localStorage.setItem('domain', form.domain)
     } else {
         if (form.domain)
             inputError("input[name=domain]", "Your subdomain is not right...");
         q("#instr").style.display = "none";
     }
+}
+if (localStorage.getItem('domain')) {
+    q('input[name=domain]').value = localStorage.getItem('domain')
 }
 checkDomain()
 q("input[name=domain]").addEventListener("blur", checkDomain);
@@ -153,7 +157,7 @@ q("#add-redirect").addEventListener("click", async (event) => {
 // STEP 3 - Check DNS
 function setDnsValid(isValid) {
     if (isValid) {
-        q("#check-dns").innerHTML = "DNS is properly set!"
+        q("#check-dns").innerHTML = "DNS is set! Redirects are now active."
         q("#check-dns").disabled = true
         q("#check-dns").setAttribute('aria-selected', true);
         q('#redirection-content').setAttribute('aria-selected', true)
