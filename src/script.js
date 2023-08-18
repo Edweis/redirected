@@ -20,6 +20,7 @@ const RANDOM_PLACEHOLDERS = [
 ].sort(() => Math.random() - 0.5)
 function* _genPlaceholders() {
     for (const item of RANDOM_PLACEHOLDERS) yield item;
+    return _genPlaceholders()
 }
 const genPlaceholders = _genPlaceholders()
 
