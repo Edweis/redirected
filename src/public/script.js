@@ -10,7 +10,7 @@ const RANDOM_PLACEHOLDERS = [
     { pathname: 'linkedin', destination: 'linkedin.com/in/frulliere/' },
     { pathname: 'telegram', destination: 't.me/francoisrulliere' },
     { pathname: 'whatsapp', destination: 'wa.me/6589595402' },
-    { pathname: 'contracts/marcus', destination: 'docs.google.com/document/d/NeoxZKeDCK27XWjc/edit' },
+    { pathname: 'contracts', destination: 'docs.google.com/document/d/NeoxZKeDCK27XWjc/edit' },
     { pathname: 'facebook', destination: 'facebook.com/redirected-app' },
     { pathname: 'instagram', destination: 'instagram.com/redirected-app' },
     { pathname: 'twitter', destination: 'twitter.com/redirected-app' },

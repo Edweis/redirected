@@ -1,9 +1,15 @@
 import { Middleware } from "koa";
 import { db } from "../lib/database.js";
 import { hasCertificate } from "./dns.js";
+import fs from 'fs/promises'
+import { projectRoot } from "../lib/helpers.js";
+
 
 export const stats: Middleware = async (ctx, next) => {
-  if (ctx.path !== '/stats' || ctx.method !== 'GET') return next();
+  const statPathFile = projectRoot() + '/../.stats-path'
+  const statPath = await fs.readFile(statPathFile).then(d => d.toString().trim()).catch(() => '/stats');
+  
+  if (ctx.path !== statPath || ctx.method !== 'GET') return next();
 
   const travels = await db.all<Array<{ domain: string, pathname: string, count: number }>>(`
     SELECT domain, pathname, COUNT(status) as count 
