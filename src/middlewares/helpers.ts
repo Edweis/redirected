@@ -71,8 +71,8 @@ export const log: Middleware = async (ctx, next) => {
 }
 
 export const limiter = RateLimit.middleware({
-  interval: { min: 5 },
-  max: 30, // limit each IP to 100 requests per interval
+  interval: { min: 1 },
+  max: 60, 
 });
 
 
