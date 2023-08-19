@@ -5,7 +5,7 @@ const qEach = (query, ctxOrFn, fn) => { (fn ? ctxOrFn : document).querySelectorA
 const q = (query, ctx) => (ctx || document).querySelector(query);
 
 const RANDOM_PLACEHOLDERS = [
-    { pathname: 'meeting', destination: 'calendly.com/awesome/1-hour' },
+    { pathname: 'meeting', destination: 'zcal.co/awesome/1-hour' },
     { pathname: 'github', destination: 'github.com/edweis' },
     { pathname: 'linkedin', destination: 'linkedin.com/in/frulliere/' },
     { pathname: 'telegram', destination: 't.me/francoisrulliere' },
@@ -41,11 +41,13 @@ const MATCH_URL = /^(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFF
 
 /* Interactions */
 const form = {};
+q('[name=destination]').addEventListener('input', e => e.target.value = e.target.value.replace(/^http?s:\/\//, ''))
+if (localStorage.getItem('domain'))  // set cached value
+    q('input[name=domain]').value = localStorage.getItem('domain')
 qEach("form input", (input) => {
     form[input.name] = input.value;
-    input.addEventListener("keypress", (e) => form[e.target.name] = e.target.value);
+    input.addEventListener("input", (e) => form[e.target.name] = e.target.value );
 });
-q('[name=destination]').addEventListener('input', e => e.target.value = e.target.value.replace(/^http?s:\/\//, ''))
 
 
 // STEP 1
@@ -117,9 +119,7 @@ function checkDomain() {
         q("#instr").style.display = "none";
     }
 }
-if (localStorage.getItem('domain')) {
-    q('input[name=domain]').value = localStorage.getItem('domain')
-}
+
 checkDomain()
 q("input[name=domain]").addEventListener("blur", checkDomain);
 q("input[name=domain]").addEventListener("keypress", e => {
