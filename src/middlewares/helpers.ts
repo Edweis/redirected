@@ -17,9 +17,15 @@ export const initDb = async () => {
   await db.exec(`CREATE TABLE IF NOT EXISTS travels (
                   domain TEXT NOT NULL, 
                   pathname TEXT NOT NULL, 
-                  destination TEXT, 
-                  ip TEXT NOT NULL,
                   createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+
+                  ip TEXT NOT NULL,
+                  method TEXT NOT NULL,
+                  referrer TEXT,
+                  userAgent Text NOT NULL,
+
+                  status TEXT NOT NULL,
+                  redirectedTo TEXT,
                   PRIMARY KEY (domain, pathname, createdAt)
                 );`)
   const count = await db.get<{ count: number }>('SELECT COUNT(*) as count FROM redirects');
@@ -79,3 +85,8 @@ export const execPromise = (command: string) => new Promise<string>((res, rej) =
   })
 }
 )
+
+export const firewall: Middleware = async (ctx, next) => {
+  if (ctx.path.includes('..')) ctx.status = 400;
+  else return next()
+}

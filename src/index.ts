@@ -3,15 +3,20 @@ import cors from '@koa/cors'
 import http from 'http';
 import https from 'https';
 import { health } from './api/health.js';
-import { bodyParser, errorHandler, forceHttps, initDb, limiter, log } from './middlewares/helpers.js';
+import { bodyParser, errorHandler, firewall, forceHttps, initDb, limiter, log } from './middlewares/helpers.js';
 import { redirectDelete, redirectGet, redirectPost } from './api/redirect.js';
-import { cssFile, jsFile, rootWebsite, wellKnownForCerts } from './middlewares/static.js';
+import {   rootWebsite, staticAssets, wellKnownForCerts } from './middlewares/static.js';
 import { httpsOptions } from './middlewares/https-options.js';
 import { dnsCheckPost } from './api/dns.js';
 import { forwardLink } from './middlewares/forward-link.js';
+import { logRequest } from './middlewares/log-request.js';
 
 void initDb()
 const app = new koa();
+
+// Middlewares
+app.use(firewall)
+app.use(logRequest)
 app.use(errorHandler);
 app.use(log);
 app.use(bodyParser);
@@ -23,8 +28,7 @@ app.use(forceHttps);
 // Static assets
 app.use(rootWebsite);
 app.use(wellKnownForCerts);
-app.use(cssFile);
-app.use(jsFile);
+app.use(staticAssets);
 
 
 // Api

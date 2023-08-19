@@ -22,6 +22,7 @@
     "@types/koa__cors": "^4.0.0",
     "concurrently": "^8.2.0",
     "esbuild": "^0.19.1",
+    "esbuild-plugin-copy": "^2.1.1",
     "esbuild-postcss": "^0.0.4",
     "postcss": "^8.4.28",
     "postcss-nested": "^6.0.1",

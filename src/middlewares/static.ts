@@ -5,26 +5,27 @@ import { projectRoot } from "../lib/helpers.js";
 
 // HTML
 export const rootWebsite: Middleware = async (ctx, next) => {
-  if (ctx.path !== '/') return next()
-  const pathName = path.join(projectRoot(), 'dist/index.html')
-  ctx.type = 'html';
-  ctx.body = fs.createReadStream(pathName);
+  if (ctx.path === '/') ctx.path = '/public/index.html'
+  if (ctx.path === '/robot.txt') ctx.path = '/public/robot.txt'
+  return next()
 }
 
-// CSS
-export const cssFile: Middleware = async (ctx, next) => {
-  if (ctx.path !== '/styles.css') return next()
-  const pathName = path.join(projectRoot(), 'dist/styles.css')
-  ctx.type = 'text/css'
+const EXTS = new Map([
+  ['html', 'html'],
+  ['js', 'text/javascript'],
+  ['css', 'text/css'],
+  ['ico', 'image/x-icon'],
+  ['png', 'image/png'],
+  ['webmanifest', 'text'],
+])
+// Robot.txt
+export const staticAssets: Middleware = async (ctx, next) => {
+  const [, fileName, ext] = /\/public\/([\w\-]+\.(\w+))/.exec(ctx.path) || []
+  console.log(EXTS.has(ext), { fileName, ext })
+  if (!EXTS.has(ext)) return next()
+  const pathName = path.join(projectRoot(), 'dist/public/' + fileName)
   ctx.body = fs.createReadStream(pathName);
-}
-
-// JS
-export const jsFile: Middleware = async (ctx, next) => {
-  if (ctx.path !== '/script.js') return next()
-  const pathName = path.join(projectRoot(), 'dist/script.js')
-  ctx.type = 'text/javascript'
-  ctx.body = fs.createReadStream(pathName);
+  ctx.type = EXTS.get(ext)!
 }
 
 // Certificates

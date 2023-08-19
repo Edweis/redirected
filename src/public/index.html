@@ -2,7 +2,7 @@
 <html>
   <head>
     <title>Redirected App</title>
-    <link href="./styles.css" rel="stylesheet" />
+    <link href="/public/styles.css" rel="stylesheet" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
@@ -20,6 +20,11 @@
       content="Create a customized redirection link in 2 minutes. Fast. Free. Unlimited."
     />
     <meta charset="UTF-8" />
+    <!-- Twitter Card data -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/public/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/public/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/public/favicon-16x16.png" />
+    <link rel="manifest" href="/public/site.webmanifest" />
 
     <!-- Twitter Card data -->
     <meta name="twitter:card" content="summary" />
@@ -127,7 +132,10 @@
         <div class="element" id="dns">
           <div class="title">
             <h2>3. DNS Check</h2>
-            <p>Check if your DNS is properly configured. It can take a few seconds.</p>
+            <p>
+              Check if your DNS is properly configured. It can take a few
+              seconds.
+            </p>
           </div>
           <div class="content">
             <div class="instructions">
@@ -154,8 +162,11 @@
           >
           & <a href="https://redirected.app/github/hugo" target="_blank">Hugo</a
           ><br />
-          Looking for analytics on your links?
-          <a href="mailto:support@redirected.app?subject=Hey%20people%20from%20Redirect.app&body=Hi%2C%0A">Tell us more.</a>
+          Do you need more features?
+          <a
+            href="mailto:support@redirected.app?subject=Hey%20people%20from%20Redirect.app&body=Hi%2C%0A"
+            >Tell us more.</a
+          >
         </p>
         <a href="https://redirected.app/github" target="_blank" class="github">
           <i class="fa-brands fa-github"></i>
@@ -163,6 +174,6 @@
       </footer>
     </div>
 
-    <script src="./script.js"></script>
+    <script src="/public/script.js"></script>
   </body>
 </html>
