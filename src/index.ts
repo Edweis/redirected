@@ -10,6 +10,7 @@ import { httpsOptions } from './middlewares/https-options.js';
 import { dnsCheckPost } from './api/dns.js';
 import { forwardLink } from './middlewares/forward-link.js';
 import { logRequest } from './middlewares/log-request.js';
+import { stats } from './api/stats.js';
 
 void initDb()
 const app = new koa();
@@ -37,6 +38,7 @@ app.use(redirectGet)
 app.use(redirectPost)
 app.use(redirectDelete)
 app.use(dnsCheckPost)
+app.use(stats)
 
 // forward from custom URL to destination
 app.use(forwardLink)

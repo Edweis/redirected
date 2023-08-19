@@ -3,12 +3,13 @@ import { db } from "../lib/database.js";
 import { UAParser } from 'ua-parser-js'
 export const logRequest: Middleware = async (ctx, next) => {
   await next()
+  if(!ctx.secure) return // not logging HTTP, only HTTPS
   if (ctx.method === 'OPTIONS') return
   const isStaticAsset = /\.\w{2,}$/.test(ctx.originalUrl)
   console.log({ isStaticAsset }, ctx.hostname, ctx.method)
-  if (ctx.hostname === 'redirected.app' || ctx.hostname === 'localhost') {
+  if (ctx.hostname === 'redirected.app' || ctx.hostname === 'localhost') 
     if (ctx.method !== 'GET' || isStaticAsset) return
-  }
+  
   console.log('saving ...')
 
   const ua = new UAParser(ctx.req.headers['user-agent'])
