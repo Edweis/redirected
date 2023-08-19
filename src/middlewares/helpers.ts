@@ -23,6 +23,9 @@ export const initDb = async () => {
                   method TEXT NOT NULL,
                   referrer TEXT,
                   userAgent Text NOT NULL,
+                  userAgentBrowser Text,
+                  userAgentOs Text,
+                  userAgentDevice Text,
 
                   status TEXT NOT NULL,
                   redirectedTo TEXT,

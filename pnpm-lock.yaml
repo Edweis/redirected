@@ -32,6 +32,9 @@ dependencies:
   sqlite3:
     specifier: ^5.1.6
     version: 5.1.6
+  ua-parser-js:
+    specifier: ^1.0.35
+    version: 1.0.35
   yup:
     specifier: ^1.2.0
     version: 1.2.0
@@ -49,6 +52,9 @@ devDependencies:
   '@types/koa__cors':
     specifier: ^4.0.0
     version: 4.0.0
+  '@types/ua-parser-js':
+    specifier: ^0.7.36
+    version: 0.7.36
   concurrently:
     specifier: ^8.2.0
     version: 8.2.0
@@ -576,6 +582,10 @@ packages:
   /@types/tmp@0.0.33:
     resolution: {integrity: sha512-gVC1InwyVrO326wbBZw+AO3u2vRXz/iRWq9jYhpG4W8LXyIgDv3ZmcLQ5Q4Gs+gFMyqx+viFoFT+l3p61QFCmQ==}
     dev: false
+
+  /@types/ua-parser-js@0.7.36:
+    resolution: {integrity: sha512-N1rW+njavs70y2cApeIw1vLMYXRwfBy+7trgavGuuTfOd7j1Yh7QTRc/yqsPl6ncokt72ZXuxEU0PiCp9bSwNQ==}
+    dev: true
 
   /abbrev@1.1.1:
     resolution: {integrity: sha512-nne9/IiQ/hzIhY6pdDnbBtz7DjPTKrY00P/zvPSm5pOFkl6xuGrGnXn/VtTNNfNtAfZ9/1RtehkszU9qcTii0Q==}
@@ -2580,6 +2590,10 @@ packages:
     dependencies:
       media-typer: 0.3.0
       mime-types: 2.1.35
+    dev: false
+
+  /ua-parser-js@1.0.35:
+    resolution: {integrity: sha512-fKnGuqmTBnIE+/KXSzCn4db8RTigUzw1AN0DmdU6hJovUTbYJKyqj+8Mt1c4VfRDnOVJnENmfYkIPZ946UrSAA==}
     dev: false
 
   /undefsafe@2.0.5:

@@ -20,6 +20,7 @@
     "@types/co-body": "^6.1.0",
     "@types/koa": "^2.13.8",
     "@types/koa__cors": "^4.0.0",
+    "@types/ua-parser-js": "^0.7.36",
     "concurrently": "^8.2.0",
     "esbuild": "^0.19.1",
     "esbuild-plugin-copy": "^2.1.1",
@@ -38,6 +39,7 @@
     "nodemon": "^3.0.1",
     "sqlite": "^5.0.1",
     "sqlite3": "^5.1.6",
+    "ua-parser-js": "^1.0.35",
     "yup": "^1.2.0"
   }
 }
