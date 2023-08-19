@@ -21,7 +21,6 @@ const EXTS = new Map([
 // Robot.txt
 export const staticAssets: Middleware = async (ctx, next) => {
   const [, fileName, ext] = /\/public\/([\w\-]+\.(\w+))/.exec(ctx.path) || []
-  console.log(EXTS.has(ext), { fileName, ext })
   if (!EXTS.has(ext)) return next()
   const pathName = path.join(projectRoot(), 'dist/public/' + fileName)
   ctx.body = fs.createReadStream(pathName);

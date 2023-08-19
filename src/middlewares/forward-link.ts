@@ -11,7 +11,7 @@ export const forwardLink: Middleware = async (ctx, next) => {
     'SELECT destination FROM redirects WHERE domain = $1 AND pathname = $2 AND deletedAt IS NULL',
     [domain, pathname]
   )
-  console.log('Forwarding ', { domain, pathname, }, response?.destination)
+  console.log('🏃 Forwarding ', { domain, pathname, }, response?.destination)
   if (response == null) return ctx.redirect('https://redirected.app')
   console.log('Redirecting from ' + domain + '/' + pathname + ' to ' + response.destination);
   ctx.redirect(response.destination)

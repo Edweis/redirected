@@ -180,7 +180,7 @@ q("#check-dns").addEventListener("click", async (e) => {
 
 // Copy to clipboard
 document.addEventListener('click', (e) => {
-    const value = e.target.getAttribute('data-copy') || e.target.parentNode.getAttribute('data-copy');
+    const value = e.target.getAttribute('data-copy') || e.target.parentNode?.getAttribute('data-copy');
     if (value) {
         console.log('Copied to clipboard', value)
         navigator.clipboard.writeText(value);

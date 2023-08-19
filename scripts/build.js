@@ -12,15 +12,16 @@ const context = await esbuild.context({
   platform: 'node',
   logLevel: 'debug',
   format: 'esm',
-  entryPoints: ['src/**/*.ts', 'src/public/styles.css', 'src/public/index.html', 'src/public/script.js'],
+  entryPoints: ['src/**/*.ts', 'src/public/styles.css'],
   loader: { '.html': 'copy', '.js': 'copy' }, // Copy the HTML file to the output
-  plugins: [postCssPlugin(), copy({
-    resolveFrom: 'cwd',
-    assets: {
-      from: ['./public/*'],
-      to: ['./public'],
-    },
-  })],
+  plugins: [
+    postCssPlugin(),
+    copy({
+      copyOnStart:true, 
+      resolveFrom: 'cwd',
+      assets: { from: ['src/public/*'], to: ['dist/public'], },
+    }
+    )],
   banner: {
     // fix require import in ESM, @see https://github.com/evanw/esbuild/issues/1921#issuecomment-1403107887
     js: `import { createRequire } from 'module'; const require = createRequire(import.meta.url);`,
