@@ -10,7 +10,7 @@ const certDatabase = IS_PROD
   ? async (domain: string) => {
     const dir = `${projectRoot()}/../certs/live/${domain}`
     const exists = fs.existsSync(dir)
-    console.log({ domain, exists})
+    console.log({ domain, exists })
     return {
       key: fs.readFileSync(`${dir}/privkey.pem`),
       cert: fs.readFileSync(`${dir}/fullchain.pem`)
