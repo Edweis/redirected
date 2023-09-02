@@ -1,0 +1,23 @@
+<section class="element" id="subdomain">
+  <div class="title">
+    <h2>1. Subdomain</h2>
+    <p>Enter your subdomain such as link.domain.com</p>
+  </div>
+  <div class="content">
+    <label class="input">
+      <input
+        autofocus
+        hx-get="/api2/redirects"
+        hx-trigger="input delay:300ms, search, blur"
+        hx-target="#redirection-list"
+        type="url"
+        name="domain"
+        placeholder="link.domain.com"
+        pattern="[a-z\-.]"
+        autocapitalize="false"
+        autocomplete="false"
+        tabindex="1"
+      />
+    </label>
+  </div>
+</section>

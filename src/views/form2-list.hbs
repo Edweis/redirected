@@ -1,0 +1,35 @@
+{{#each redirects}}
+<div class="redirection" id="line-template">
+  <div class="line">
+    From:
+    <label class="input">
+      <span class="hidden-sm">https://{{ domain }}</span
+      >/{{ this.pathname }}
+    </label>
+    <div class="options">
+      <button
+        data-copy="https://{{ domain }}/{{ this.pathname }}"
+        type="button"
+        class="square"
+        title="Copy link to clipboard"
+        tabindex="-1"
+      >
+        <i class="fa-solid fa-link"></i>
+      </button>
+      <button
+        data-remove
+        type="button"
+        class="square"
+        title="Delete redirection"
+        tabindex="-1"
+      >
+        <i class="fa-solid fa-trash"></i>
+      </button>
+    </div>
+  </div>
+  <div class="line">
+    To:
+    <label class="input">{{ this.destination }} </label>
+  </div>
+</div>
+{{/each}}

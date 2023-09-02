@@ -1,0 +1,38 @@
+<section class="element">
+  <div class="title">
+    <h2>2. Redirections</h2>
+    <p>Create as many redirections as you'd like.</p>
+  </div>
+  <div class="content" id="redirection-list">
+    {{> form2-list.hbs}}
+  </div>
+  <div class="content">
+    <div class="redirection" id="line-template">
+      <div class="line">
+        From:
+        <label class="input">
+          <span class="prefix"
+            >https://<span data-domain>link.domain.com</span>/</span
+          >
+          <input name="pathname" type="url" tabindex="2" />
+        </label>
+      </div>
+      <div class="line">
+        To:
+        <label class="input"
+          ><span class="prefix"> https:// </span>
+          <input
+            type="url"
+            placeholder="calendly.com/awesome/1-hour"
+            name="destination"
+            tabindex="3"
+          />
+        </label>
+      </div>
+    </div>
+    <button type="button" id="add-redirect">
+      <i class="fa-solid fa-plus"></i>
+      Add redirection
+    </button>
+  </div>
+</section>

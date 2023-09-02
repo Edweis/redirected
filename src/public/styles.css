@@ -323,5 +323,10 @@ footer {
   form .element .title p {
     text-align: right;
   }
-  
+}
+
+@media (max-width: 640px) {
+  .hidden-sm {
+    visibility: hidden;
+  }
 }

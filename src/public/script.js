@@ -47,7 +47,7 @@ if (localStorage.getItem('domain'))  // set cached value
     q('input[name=domain]').value = localStorage.getItem('domain')
 qEach("form input", (input) => {
     form[input.name] = input.value;
-    input.addEventListener("input", (e) => form[e.target.name] = e.target.value );
+    input.addEventListener("input", (e) => form[e.target.name] = e.target.value);
 });
 
 
@@ -109,13 +109,13 @@ function checkDomain() {
     if (isValid) {
         q("input[name=pathname]").disabled = false;
         q("input[name=destination]").disabled = false;
-        q("input[name=pathname]").focus(); 
+        q("input[name=pathname]").focus();
         fetchRedirects(form.domain);
         qEach("[data-domain]", i => i.innerHTML = form.domain)
         q("#instr").style.display = "block";
         localStorage.setItem('domain', form.domain)
     } else {
-        if (form.domain){
+        if (form.domain) {
             inputError("input[name=domain]", "Your subdomain is not right...");
             q('input[name=domain]').focus()
         }

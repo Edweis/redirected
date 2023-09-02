@@ -5,6 +5,7 @@ import { Middleware } from "../lib/types.js";
 import parse from 'co-body'
 import { RateLimit } from 'koa2-ratelimit';
 
+
 export const initDb = async () => {
   await db.exec(`CREATE TABLE IF NOT EXISTS redirects (
                   domain TEXT NOT NULL, 
@@ -52,7 +53,7 @@ export const errorHandler: Middleware = async (ctx, next) => {
 export const bodyParser: Middleware = async (ctx, next) => {
   if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(ctx.method)) {
     const body = await parse(ctx.req).catch(() => '{}')
-    ctx.state = { body: JSON.parse(body) };
+    ctx.state = { ...ctx.state, body: JSON.parse(body) };
   }
   return next()
 }
@@ -75,7 +76,7 @@ export const log: Middleware = async (ctx, next) => {
 
 export const limiter = RateLimit.middleware({
   interval: { min: 1 },
-  max: 60, 
+  max: 60,
 });
 
 
@@ -93,3 +94,5 @@ export const firewall: Middleware = async (ctx, next) => {
   if (ctx.path.includes('..')) ctx.status = 400;
   else return next()
 }
+
+

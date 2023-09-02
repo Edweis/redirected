@@ -4,8 +4,7 @@ import fs from 'fs'
 import { SUB_DOMAIN_REG, projectRoot } from '../lib/helpers.js'
 import mem from 'mem';
 import { execPromise } from '../middlewares/helpers.js'
-import { db } from '../lib/database.js'
-
+ 
 const isProd = process.env.NODE_ENV === 'production'
 const certPath = `${projectRoot()}/../certs/live`
 
