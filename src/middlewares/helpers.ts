@@ -53,7 +53,7 @@ export const errorHandler: Middleware = async (ctx, next) => {
 export const bodyParser: Middleware = async (ctx, next) => {
   if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(ctx.method)) {
     const body = await parse(ctx.req).catch(() => '{}')
-    ctx.state = { ...ctx.state, body: JSON.parse(body) };
+    ctx.state = { ...ctx.state, body: body };
   }
   return next()
 }

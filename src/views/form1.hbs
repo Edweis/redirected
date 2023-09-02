@@ -6,14 +6,13 @@
   <div class="content">
     <label class="input">
       <input
-        autofocus
+        autofocus="true"
         hx-get="/api2/redirects"
         hx-trigger="input delay:300ms, search, blur"
         hx-target="#redirection-list"
-        type="url"
+        inputmode="url"
         name="domain"
         placeholder="link.domain.com"
-        pattern="[a-z\-.]"
         autocapitalize="false"
         autocomplete="false"
         tabindex="1"
