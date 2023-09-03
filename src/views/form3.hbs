@@ -13,9 +13,10 @@
         <span class="link">redirected.app</span>
       </p>
     </div>
-    <button class="w-full">
+    <button class="w-full" hx-post="/dns?domain={{ domain }}">
       <i class="fa-regular fa-eye"></i>
       Check DNS
+      <span class="htmx-indicator">...</span>
     </button>
   </div>
 </section>

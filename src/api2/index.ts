@@ -58,13 +58,17 @@ router.delete('/', async (ctx) => {
 })
 
 router.post('/dns', async ctx => {
-  const domain = ctx.query.domain as string
+  const domain = ctx.request.query.domain as string
+  if (domain == null) {
+    ctx.status = 400; return
+  }
   const cnameDomaines = await getCname(domain)
   console.log('DNS for ', { domain, cnameDomaines })
   const isValid = cnameDomaines.includes('redirected.app')
-  ctx.body = { isValid }
+  ctx.status = 204
   if (isValid && isProd && !hasCertificate(domain)) {
     await createCertificate(domain)
+    ctx.status = 200
   }
 })
 
