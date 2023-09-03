@@ -8,11 +8,12 @@
   <div class="col-span-3">
     <label>
       <input
+        value="{{ domain }}"
         autofocus="true"
         hx-get="/"
         hx-trigger="input delay:300ms, search, blur"
-        hx-target="#redirection-list"
-        hx-select="#redirection-list"
+        hx-target="#list"
+        hx-select="#list"
         hx-push-url="true"
         inputmode="url"
         name="domain"
@@ -22,5 +23,8 @@
         tabindex="1"
       />
     </label>
+    <span hx-swap-oob="true" id="error-domain">
+      {{ errors.domain }}
+    </span>
   </div>
 </section>

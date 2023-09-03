@@ -4,12 +4,6 @@ import path from "path"
 import { projectRoot } from "../lib/helpers.js";
 import { render } from "./render.js";
 
-// HTML
-export const rootWebsite: Middleware = async (ctx, next) => {
-  if (ctx.path === '/') return ctx.body = render('main')
-  if (ctx.path === '/robot.txt') ctx.path = '/public/robot.txt'
-  return next()
-}
 
 const EXTS = new Map([
   ['html', 'html'],

@@ -4,12 +4,12 @@
     <p>Create as many redirections as you'd like.</p>
   </div>
   <div>
-    <div>
+    <div id="list">
       {{> form2-list.hbs}}
     </div>
     <form
-      hx-post="/api2/redirects"
-      hx-target="#redirection-list"
+      hx-post="/"
+      hx-target="#list"
       hx-swap="beforeend"
       hx-include="[name='domain']"
       class="grid gap-4"

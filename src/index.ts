@@ -5,7 +5,7 @@ import https from 'https';
 import { health } from './api/health.js';
 import { bodyParser, errorHandler, firewall, forceHttps, initDb, limiter, log, } from './middlewares/helpers.js';
 import { redirectDelete, redirectGet, redirectPost } from './api/redirect.js';
-import { rootWebsite, staticAssets, wellKnownForCerts } from './middlewares/static.js';
+import { staticAssets, wellKnownForCerts } from './middlewares/static.js';
 import { httpsOptions } from './middlewares/https-options.js';
 import { dnsCheckPost } from './api/dns.js';
 import { forwardLink } from './middlewares/forward-link.js';
@@ -28,13 +28,12 @@ app.use(forceHttps);
 
 
 // Static assets
-app.use(rootWebsite);
+app.use(api2Router.routes()).use(api2Router.allowedMethods())
 app.use(wellKnownForCerts);
 app.use(staticAssets);
 
 
 // Api
-app.use(api2Router.routes()).use(api2Router.allowedMethods())
 
 app.use(health)
 app.use(redirectGet)
