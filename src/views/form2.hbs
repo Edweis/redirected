@@ -1,10 +1,10 @@
 <section class="element">
   <div class="title">
     <h2>2. Redirections</h2>
-    <p>Create as many redirections as you'd like.</p>
+    <p>Create as many redirections as you&apos;d like.</p>
   </div>
-  <div>
-    <div id="list">
+  <div class="grid gap-8">
+    <div id="list" class="grid gap-8">
       {{> form2-list.hbs}}
     </div>
     <form
@@ -12,26 +12,25 @@
       hx-target="#list"
       hx-swap="beforeend"
       hx-include="[name='domain']"
-      class="grid gap-4"
+      class="grid gap-2"
     >
       <div class="flex gap-2 items-center">
         From:
-        <label class="input">
-          <span class="prefix"
-            >https://<span data-domain>link.domain.com</span>/</span
-          >
-          <input name="pathname" inputmode="url" tabindex="2" />
+        <label class="w-full">
+          <span>https://{{ domain }}/</span>
+          <input name="pathname" inputmode="url" tabindex="2" class="w-full" />
         </label>
       </div>
       <div class="flex gap-2 items-center">
         To:
-        <label class="input"
-          ><span class="prefix"> https:// </span>
+        <label class="w-full">
+          https://
           <input
             inputmode="url"
             placeholder="calendly.com/awesome/1-hour"
             name="destination"
             tabindex="3"
+            class="w-full"
           />
         </label>
       </div>
