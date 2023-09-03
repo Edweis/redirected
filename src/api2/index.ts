@@ -2,7 +2,9 @@ import Router from '@koa/router'
 import { Redirect, db } from "../lib/database.js"
 import { hasCertificate } from "../api/dns.js"
 import { render } from "../middlewares/render.js"
+import { createCertificate, getCname } from './dns.js'
 
+const isProd = process.env.NODE_ENV === 'production'
 const DISABLE_OUR_REDIRECT = false
 const router = new Router();
 const SUB_DOMAIN_REGEX =
@@ -54,5 +56,17 @@ router.delete('/', async (ctx) => {
   )
   ctx.status = 200
 })
+
+router.post('/dns', async ctx => {
+  const domain = ctx.query.domain as string
+  const cnameDomaines = await getCname(domain)
+  console.log('DNS for ', { domain, cnameDomaines })
+  const isValid = cnameDomaines.includes('redirected.app')
+  ctx.body = { isValid }
+  if (isValid && isProd && !hasCertificate(domain)) {
+    await createCertificate(domain)
+  }
+})
+
 
 export default router;
