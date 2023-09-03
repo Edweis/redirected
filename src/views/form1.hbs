@@ -1,15 +1,19 @@
-<section class="element" id="subdomain">
-  <div class="title">
-    <h2>1. Subdomain</h2>
-    <p>Enter your subdomain such as link.domain.com</p>
+<section id="subdomain" class="grid grid-cols-4 gap-4">
+  <div class="title text-right">
+    <h2 class="text-2xl font-bold text-yellow-500">1. Subdomain</h2>
+    <p class="text-sm text-gray-500">
+      Enter your subdomain such as link.domain.com
+    </p>
   </div>
-  <div class="content">
-    <label class="input">
+  <div class="col-span-3">
+    <label>
       <input
         autofocus="true"
-        hx-get="/api2/redirects"
+        hx-get="/"
         hx-trigger="input delay:300ms, search, blur"
         hx-target="#redirection-list"
+        hx-select="#redirection-list"
+        hx-push-url="true"
         inputmode="url"
         name="domain"
         placeholder="link.domain.com"
