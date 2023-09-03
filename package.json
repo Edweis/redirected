@@ -6,10 +6,10 @@
   "type": "module",
   "scripts": {
     "build:js": "node ./scripts/build.js",
+    "build": "concurrently pnpm:build:*",
     "start:js": "pnpm build:js --watch",
     "start:watch": "nodemon ./dist/index.js",
     "start": "concurrently  pnpm:start:*",
-    "build": "concurrently pnpm:build:*",
     "deploy": "pnpm build && sh ./scripts/deploy.sh"
   },
   "keywords": [],
@@ -23,6 +23,7 @@
     "@types/koa__cors": "^4.0.0",
     "@types/koa__router": "^12.0.0",
     "@types/ua-parser-js": "^0.7.36",
+    "autoprefixer": "^10.4.15",
     "concurrently": "^8.2.0",
     "esbuild": "^0.19.1",
     "esbuild-plugin-copy": "^2.1.1",

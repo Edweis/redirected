@@ -70,6 +70,9 @@ devDependencies:
   '@types/ua-parser-js':
     specifier: ^0.7.36
     version: 0.7.36
+  autoprefixer:
+    specifier: ^10.4.15
+    version: 10.4.15(postcss@8.4.28)
   concurrently:
     specifier: ^8.2.0
     version: 8.2.0
