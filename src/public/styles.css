@@ -6,8 +6,10 @@
 @layer components {
   /* input */
   label {
-    @apply px-4 h-10 flex items-center border-2 border-gray-500 rounded-full focus-within:border-yellow-500 transition-colors focus-within:bg-gray-700 text-right;
+    @apply px-4 h-10 flex items-center rounded-full  text-right;
     @apply focus-within:text-gray-500;
+    @apply border-2 border-gray-500;
+    @apply focus-within:border-yellow-500 focus-within:bg-gray-700 transition-colors duration-300;
   }
 
   label > input {
@@ -17,7 +19,9 @@
   /* button */
   button,
   [type="button"] {
-    @apply flex justify-center items-center bg-gray-500 hover:bg-yellow-500  hover:text-gray-900 rounded-full h-10 px-4 gap-2  transition-colors;
+    @apply flex justify-center items-center bg-gray-500 rounded-full h-10 px-4 gap-2 transition-colors;
+    @apply hover:bg-yellow-500 hover:text-gray-900;
+    @apply focus:bg-yellow-500 focus:text-gray-900 focus:outline-none;
   }
   button.icon,
   [type="button"].icon {

@@ -4,7 +4,7 @@
     <p>Create as many redirections as you'd like.</p>
   </div>
   <div>
-    <div class="content" id="redirection-list">
+    <div>
       {{> form2-list.hbs}}
     </div>
     <form
@@ -12,32 +12,30 @@
       hx-target="#redirection-list"
       hx-swap="beforeend"
       hx-include="[name='domain']"
-      class="content"
+      class="grid gap-4"
     >
-      <div class="redirection" id="line-template">
-        <div class="line">
-          From:
-          <label class="input">
-            <span class="prefix"
-              >https://<span data-domain>link.domain.com</span>/</span
-            >
-            <input name="pathname" inputmode="url" tabindex="2" />
-          </label>
-        </div>
-        <div class="line">
-          To:
-          <label class="input"
-            ><span class="prefix"> https:// </span>
-            <input
-              inputmode="url"
-              placeholder="calendly.com/awesome/1-hour"
-              name="destination"
-              tabindex="3"
-            />
-          </label>
-        </div>
+      <div class="flex gap-2 items-center">
+        From:
+        <label class="input">
+          <span class="prefix"
+            >https://<span data-domain>link.domain.com</span>/</span
+          >
+          <input name="pathname" inputmode="url" tabindex="2" />
+        </label>
       </div>
-      <button id="add-redirect">
+      <div class="flex gap-2 items-center">
+        To:
+        <label class="input"
+          ><span class="prefix"> https:// </span>
+          <input
+            inputmode="url"
+            placeholder="calendly.com/awesome/1-hour"
+            name="destination"
+            tabindex="3"
+          />
+        </label>
+      </div>
+      <button class="w-full">
         <i class="fa-solid fa-plus"></i>
         Add redirection
       </button>

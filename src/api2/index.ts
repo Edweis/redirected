@@ -10,7 +10,7 @@ const router = new Router({ 'prefix': '/api2' });
 const SUB_DOMAIN_REGEX =
   /^(?:[\dA-Za-z](?:[\dA-Za-z-]{0,61}[\dA-Za-z])?\.)+[A-Za-z]{2,7}$/;
 
-router.get('/redirects', async (ctx, next) => {
+router.get('/', async (ctx, next) => {
   const domain = ctx.query.domain
   if (typeof domain !== 'string') return next()
   if (!SUB_DOMAIN_REGEX.test(domain)) return next()
@@ -33,7 +33,7 @@ const schemaRedirectPut: yup.ObjectSchema<RedirectNew> = yup.object({
   destination: yup.string().transform(u => 'https://' + u).url().required()
 }).required()
 
-router.post('/redirects', async (ctx, next) => {
+router.post('/', async (ctx, next) => {
   const { domain, pathname, destination } = schemaRedirectPut.validateSync(ctx.state.body)
   if (DISABLE_OUR_REDIRECT && domain === 'redirected.app') { ctx.status = 401; return }
   console.log('Adding ', { domain, pathname, destination })
@@ -47,7 +47,7 @@ router.post('/redirects', async (ctx, next) => {
         ;`,
     [domain, pathname, destination]
   )
-  ctx.body = render('form2-list', { redirects: [{ domain, pathname, destination }] })
+  return ctx.redirect('/')
 })
 
 export default router;
