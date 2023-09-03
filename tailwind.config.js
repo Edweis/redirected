@@ -1,10 +1,16 @@
 /** @type {import('tailwindcss').Config} */
 const colors = require('tailwindcss/colors')
+const defaultTheme = require('tailwindcss/defaultTheme')
 export default {
   content: ["./src/**/*.{html,js,hbs}"],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        'sans': ["Raleway", ...defaultTheme.fontFamily.sans],
+      },
+    },
     colors: {
+      white: '#FFF',
       yellow: {
         500: 'hsl(55, 74%, 49%)',
         600: 'hsla(55, 74%, 49%, 80%)',
@@ -19,6 +25,8 @@ export default {
         600: 'hsla(60, 18 %, 90 %, 10 %)',
         700: 'hsla(60, 18 %, 90 %, 5 %)',
         800: 'hsla(60, 18 %, 90 %, 2 %)',
+
+        900: 'hsl(60, 1%, 13%)'
       }
     }
   },
