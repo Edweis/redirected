@@ -1,0 +1,35 @@
+{{#each redirects}}
+<div class="line grid gap-2">
+  <div class="flex items-center gap-2">
+    From:
+    <label class="grow text-gray-500">
+      <span class="hidden:sm:show">https://{{ domain }}</span
+      >/{{ this.pathname }}
+    </label>
+    <button
+      data-copy="https://{{ domain }}/{{ this.pathname }}"
+      type="button"
+      title="Copy link to clipboard"
+      tabindex="-1"
+      class="icon"
+    >
+      <i class="fa-solid fa-link"></i>
+    </button>
+    <button
+      type="button"
+      title="Delete redirection"
+      tabindex="-1"
+      class="icon"
+      hx-delete="/?domain={{ domain }}&pathname={{ this.pathname }}"
+      hx-swap="delete"
+      hx-target="closest .line"
+    >
+      <i class="fa-solid fa-trash"></i>
+    </button>
+  </div>
+  <div class="flex items-center gap-2">
+    To:
+    <label class="text-gray-500 w-full">{{ this.destination }}</label>
+  </div>
+</div>
+{{/each}}

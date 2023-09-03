@@ -12,8 +12,8 @@ const context = await esbuild.context({
   platform: 'node',
   logLevel: 'debug',
   format: 'esm',
-  entryPoints: ['src/**/*.ts', 'src/public/styles.css'],
-  loader: { '.html': 'copy', '.js': 'copy' }, // Copy the HTML file to the output
+  entryPoints: ['src/**/*.ts','src/**/*.hbs', 'src/public/styles.css'],
+  loader: { '.html': 'copy', '.js': 'copy', '.hbs': 'copy' }, // Copy the HTML file to the output
   plugins: [
     postCssPlugin(),
     copy({

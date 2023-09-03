@@ -1,0 +1,22 @@
+<section>
+  <div>
+    <h2>3. DNS Check</h2>
+    <p>Check if your DNS is properly configured. It can take a few seconds.</p>
+  </div>
+  <div class="grid gap-2">
+    <div>
+      <p>Add CNAME record in your DNS<br /></p>
+      <p class="hidden">
+        from
+        <span class="link" data-domain>link.domain.com</span>
+        to
+        <span class="link">redirected.app</span>
+      </p>
+    </div>
+    <button class="w-full" hx-post="/dns?domain={{ domain }}">
+      <i class="fa-regular fa-eye"></i>
+      Check DNS
+      <span class="htmx-indicator">...</span>
+    </button>
+  </div>
+</section>

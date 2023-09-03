@@ -1,0 +1,30 @@
+<section id="subdomain" class="grid grid-cols-4 gap-4">
+  <div class="title text-right">
+    <h2 class="text-2xl font-bold text-yellow-500">1. Subdomain</h2>
+    <p class="text-sm text-gray-500">
+      Enter your subdomain such as link.domain.com
+    </p>
+  </div>
+  <div class="col-span-3">
+    <label>
+      <input
+        value="{{ domain }}"
+        autofocus="true"
+        hx-get="/"
+        hx-trigger="input delay:300ms, search, blur"
+        hx-target="#list"
+        hx-select="#list"
+        hx-push-url="true"
+        inputmode="url"
+        name="domain"
+        placeholder="link.domain.com"
+        autocapitalize="false"
+        autocomplete="false"
+        tabindex="1"
+      />
+    </label>
+    <span hx-swap-oob="true" id="error-domain" class="text-yellow-700 ml-4">
+      {{ errors.domain }}
+    </span>
+  </div>
+</section>

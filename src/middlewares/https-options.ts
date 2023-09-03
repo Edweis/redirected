@@ -5,7 +5,7 @@ import type https from 'https'
 import { projectRoot } from '../lib/helpers.js';
 const IS_PROD = process.env.NODE_ENV === 'production'
 
-const DEV_DOMAINS = !IS_PROD && await devcert.certificateFor(['localhost', 'redirected.test'])
+const DEV_DOMAINS = {}//!IS_PROD && await devcert.certificateFor(['localhost', 'redirected.test'])
 const certDatabase = IS_PROD
   ? async (domain: string) => {
     const dir = `${projectRoot()}/../certs/live/${domain}`
