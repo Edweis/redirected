@@ -1,11 +1,8 @@
-import * as yup from 'yup'
-import { Middleware } from '../lib/types.js'
 import fs from 'fs'
-import { SUB_DOMAIN_REG, projectRoot } from '../lib/helpers.js'
+import { projectRoot } from '../lib/helpers.js'
 import mem from 'mem';
 import { execPromise } from '../middlewares/helpers.js'
 
-const isProd = process.env.NODE_ENV === 'production'
 const certPath = `${projectRoot()}/../certs/live`
 
 export const getCname = mem(

@@ -2,7 +2,6 @@ import { Middleware } from "../lib/types.js";
 import fs from 'fs';
 import path from "path"
 import { projectRoot } from "../lib/helpers.js";
-import { render } from "./render.js";
 
 
 const EXTS = new Map([

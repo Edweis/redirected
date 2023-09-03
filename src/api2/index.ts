@@ -1,9 +1,8 @@
 import fs from 'fs/promises'
 import Router from '@koa/router'
 import { Redirect, db } from "../lib/database.js"
-import { hasCertificate } from "../api/dns.js"
 import { render } from "../middlewares/render.js"
-import { createCertificate, getCname } from './dns.js'
+import { createCertificate, getCname, hasCertificate } from './dns.js'
 import { projectRoot } from '../lib/helpers.js'
 
 const isProd = process.env.NODE_ENV === 'production'
