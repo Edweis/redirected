@@ -1,11 +1,12 @@
 {
   "tabWidth": 2,
   "useTabs": false,
-  "overrides": [   
+  "printWidth": 110,
+  "overrides": [
     {
       "files": "**/*.hbs",
       "options": {
-        "parser": "angular"   
+        "parser": "angular"
       }
     }
   ]

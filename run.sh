@@ -1,1 +1,0 @@
-docker run -p 3000:80 -p 3001:443 -v .:/app --name redirected redirected 

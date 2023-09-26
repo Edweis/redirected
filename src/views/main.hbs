@@ -1,58 +1,189 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>
-      Redirected App - Create custom redirections in less than 2 minutes
-    </title>
-    <script
-      src="https://unpkg.com/htmx.org@1.9.5"
-      integrity="sha384-xcuj3WpfgjlKF+FXhSQFQ0ZNr39ln+hwjN3npfM9VBnUskLolQAcN80McRIVOPuO"
-      crossorigin="anonymous"
-    ></script>
+    <title>Redirected App - Create custom redirections in less than 2 minutes</title>
+    <script src="https://unpkg.com/htmx.org@1.9.5"></script>
     <link href="./public/styles.css" rel="stylesheet" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
-      integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"
-    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
     <meta name="theme-color" content="#d9ca20" />
     {{>seo.hbs }}
   </head>
-  <body class="bg-gray-900 text-white py-12">
+  <body hx-boost="true" class="bg-gray-900 text-white py-12">
     <div class="max-w-3xl mx-auto grid gap-16">
       <header class="grid gap-4">
-        <h1 class="text-6xl font-bold text-yellow-500">Redirected.app</h1>
-        <p class="text-2xl">
-          Create custom redirections in less than 2 minutes.
-        </p>
+        <a href="/"><h1 class="text-6xl font-bold text-yellow-500">Redirected.app</h1></a>
+        <p class="text-2xl">Create custom redirections in less than 2 minutes.</p>
       </header>
       <main class="grid gap-16">
-        {{> form1.hbs }}
-        {{> form2.hbs }}
-        {{> form3.hbs }}
+        {{!-- 
+          1. Subdomain 
+        --}}
+        <section id="subdomain" class="grid grid-cols-4 gap-4">
+          <div class="title text-right">
+            <h2 class="text-2xl font-bold text-yellow-500">1. Subdomain</h2>
+            <p class="text-sm text-gray-500">Enter your subdomain such as link.domain.com</p>
+          </div>
+          <div class="col-span-3">
+            <label>
+              <input
+                value="{{ domain }}"
+                autofocus="true"
+                hx-get="/"
+                hx-trigger="input delay:300ms, search, blur"
+                hx-target="#list"
+                hx-select="#list"
+                hx-push-url="true"
+                inputmode="url"
+                name="domain"
+                placeholder="link.domain.com"
+                autocapitalize="false"
+                autocomplete="false"
+                tabindex="1"
+              />
+            </label>
+            <span hx-swap-oob="true" id="error-domain" class="text-yellow-700 ml-4">
+              {{ errors.domain }}
+            </span>
+          </div>
+        </section>
+        {{!-- 
+          2. Redirections
+        --}}
+        <section class="element">
+          <div class="title">
+            <h2>2. Redirections</h2>
+            <p>Create as many redirections as you&apos;d like.</p>
+          </div>
+          <div class="grid gap-8">
+            <div id="list" class="grid gap-8">
+              {{#block redirects}}
+              {{#each redirects}}
+              <article class="line grid gap-2">
+                <div class="flex items-center gap-2">
+                  From:
+                  <p class="grow text-gray-500">
+                    <span class="hidden:sm:show">https://{{ domain }}</span
+                    >/{{ this.pathname }}
+                  </p>
+                  <button
+                    data-copy="https://{{ domain }}/{{ this.pathname }}"
+                    type="button"
+                    title="Copy link to clipboard"
+                    tabindex="-1"
+                    class="icon"
+                  >
+                    <i class="fa-solid fa-link"></i>
+                  </button>
+                  <button
+                    type="button"
+                    class="icon"
+                    title="Statistics"
+                    tabindex="-1"
+                    hx-push-url="true"
+                    hx-get="/?domain={{ domain }}&stats={{ this.pathname }}"
+                    hx-target="closest article"
+                    hx-swap="outerHTML"
+                  >
+                    <i class="fa-solid fa-chart-simple" aria-hidden="true"></i>
+                  </button>
+                  <button
+                    type="button"
+                    title="Delete redirection"
+                    tabindex="-1"
+                    class="icon"
+                    hx-delete="/?domain={{ domain }}&pathname={{ this.pathname }}"
+                    hx-swap="delete"
+                    hx-target="closest .line"
+                  >
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </div>
+                <div class="flex items-center gap-2">
+                  To:
+                  <p class="text-gray-500 w-full">https://{{ this.destination }}</p>
+                </div>
+                <p class="out">XX</p>
+              </article>
+              {{/each}}
+              {{/block}}
+            </div>
+            <form
+              hx-post="/"
+              hx-target="#list"
+              hx-swap="beforeend"
+              hx-include="[name='domain']"
+              class="grid gap-2"
+            >
+              <div class="flex gap-2 items-center">
+                From:
+                <label class="w-full">
+                  <span hx-swap-oob="true" id="domain-prefix">https://{{ domain }}/</span>
+                  <input name="pathname" inputmode="url" tabindex="2" class="w-full" />
+                </label>
+              </div>
+              <div class="flex gap-2 items-center">
+                To:
+                <label class="w-full">
+                  https://
+                  <input
+                    inputmode="url"
+                    placeholder="calendly.com/awesome/1-hour"
+                    name="destination"
+                    tabindex="3"
+                    class="w-full"
+                  />
+                </label>
+              </div>
+              {{#if domain}}
+              <button hx-swap-oob="true" id="add-button" class="w-full">
+                <i class="fa-solid fa-plus"></i>
+                Add redirection
+              </button>
+              {{else}}
+              <button hx-swap-oob="true" id="add-button" class="w-full" disabled>
+                <i class="fa-solid fa-plus"></i>
+                Add redirection
+              </button>
+              {{/if}}
+            </form>
+          </div>
+        </section>
+        {{!-- 
+          2. DNS Check
+        --}}
+        <section>
+          <div>
+            <h2>3. DNS Check</h2>
+            <p>Check if your DNS is properly configured. It can take a few seconds.</p>
+          </div>
+          <div class="grid gap-2">
+            <div>
+              <p>Add CNAME record in your DNS<br /></p>
+              <p class="hidden">
+                from
+                <span class="link" data-domain>link.domain.com</span>
+                to
+                <span class="link">redirected.app</span>
+              </p>
+            </div>
+            <button class="w-full" hx-post="/dns?domain={{ domain }}">
+              <i class="fa-regular fa-eye"></i>
+              Check DNS
+              <span class="htmx-indicator">...</span>
+            </button>
+          </div>
+        </section>
       </main>
+      {{!-- Footer --}}
       <footer class="text-gray-500 text-center">
         <p>
           Made with 💛 by
-          <a
-            class="text-yellow-700"
-            href="https://redirected.app/github/francois"
-            target="_blank"
+          <a class="text-yellow-700" href="https://redirected.app/github/francois" target="_blank"
             >François</a
           >
           &amp;
-          <a
-            class="text-yellow-700"
-            href="https://redirected.app/github/hugo"
-            target="_blank"
-            >Hugo</a
-          ><br />
+          <a class="text-yellow-700" href="https://redirected.app/github/hugo" target="_blank">Hugo</a><br />
           Looking for analytics? reliability? performance?<br />
           <a
             class="text-yellow-700"
@@ -60,12 +191,7 @@
             >Tell us more.</a
           >
         </p>
-        <a
-          class="text-yellow-500"
-          href="https://redirected.app/github"
-          target="_blank"
-          class="github"
-        >
+        <a class="text-yellow-500" href="https://redirected.app/github" target="_blank" class="github">
           <i class="fa-brands fa-github"></i>
         </a>
       </footer>
