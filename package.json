@@ -8,7 +8,7 @@
     "build:js": "node ./scripts/build.js",
     "build": "concurrently pnpm:build:*",
     "start:js": "pnpm build:js --watch",
-    "start:watch": "nodemon ./dist/index.js",
+    "start:watch": "sleep 2 ; nodemon ./dist/index.js",
     "start": "concurrently  pnpm:start:*",
     "deploy": "pnpm build && sh ./scripts/deploy.sh"
   },

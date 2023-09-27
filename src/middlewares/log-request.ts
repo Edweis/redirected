@@ -1,9 +1,12 @@
-import {UAParser} from 'ua-parser-js';
-import {type Middleware} from '../lib/types.js';
-import {db} from '../lib/database.js';
+import { UAParser } from 'ua-parser-js';
+import { type Middleware } from '../lib/types.js';
+import { db } from '../lib/database.js';
 
 export const logRequest: Middleware = async (ctx, next) => {
+	console.log(`> ${ctx.method} ${ctx.path}`);
 	await next();
+	console.log(`< ${ctx.status || 404} ${ctx.method} ${ctx.path}`);
+
 	if (!ctx.secure) {
 		return;
 	} // Not logging HTTP, only HTTPS
@@ -13,7 +16,7 @@ export const logRequest: Middleware = async (ctx, next) => {
 	}
 
 	const isStaticAsset = /\.\w{2,}$/.test(ctx.originalUrl);
-	console.log({isStaticAsset}, ctx.hostname, ctx.method);
+	console.log({ isStaticAsset }, ctx.hostname, ctx.method);
 	if ((ctx.hostname === 'redirected.app' || ctx.hostname === 'localhost') && (ctx.method !== 'GET' || isStaticAsset)) {
 		return;
 	}

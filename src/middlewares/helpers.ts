@@ -53,30 +53,6 @@ export const bodyParser: Middleware = async (ctx, next) => {
 	return next();
 };
 
-export const forceHttps: Middleware = async (ctx, next) => {
-	if (ctx.path.startsWith('/.well-known/')) {
-		return next();
-	}
-
-	if (ctx.protocol === 'https') {
-		return next();
-	}
-
-	if (ctx.hostname === 'localhost') {
-		return next();
-	}
-
-	const nextUrl = new URL(ctx.URL);
-	nextUrl.protocol = 'https';
-	console.log('Redireting to', nextUrl.toString());
-	ctx.redirect(nextUrl.toString());
-};
-
-export const log: Middleware = async (ctx, next) => {
-	console.log(`> ${ctx.method} ${ctx.path}`);
-	await next();
-	console.log(`< ${ctx.status || 404} ${ctx.method} ${ctx.path}`);
-};
 
 export const limiter = RateLimit.middleware({
 	interval: { min: 1 },
@@ -98,12 +74,4 @@ export const execPromise = async (command: string) => new Promise<string>((res, 
 	});
 },
 );
-
-export const firewall: Middleware = async (ctx, next) => {
-	if (ctx.path.includes('..')) {
-		ctx.status = 400;
-	} else {
-		return next();
-	}
-};
 

@@ -19,9 +19,10 @@
   button,
   [type="button"] {
     @apply flex justify-center items-center bg-gray-500 rounded-full h-10 px-4 gap-2 transition-colors;
-    @apply hover:bg-yellow-500 hover:text-gray-900;
     @apply disabled:hover:bg-gray-500 disabled:hover:text-inherit disabled:opacity-50;
     @apply focus:bg-yellow-500 focus:text-gray-900 focus:outline-none;
+    @apply hover:bg-yellow-500 hover:text-gray-900;
+    @apply aria-selected:bg-yellow-500 aria-selected:text-gray-900;
   }
   button.icon,
   [type="button"].icon {

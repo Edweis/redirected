@@ -10,10 +10,10 @@ const DISABLE_OUR_REDIRECT = false;
 const router = new Router();
 const SUB_DOMAIN_REGEX
 	= /^(?:[\dA-Za-z](?:[\dA-Za-z-]{0,61}[\dA-Za-z])?\.)+[A-Za-z]{2,7}$/;
-type Travel = { domain: string; pathname: string; count: number }
 
 router.get('/', async ctx => {
-	const { domain, stats } = ctx.query;
+	const { domain } = ctx.query;
+
 	// Validate domain 
 	const isDomainValid = typeof domain === 'string' && SUB_DOMAIN_REGEX.test(domain);
 	if (!isDomainValid) {
@@ -22,22 +22,22 @@ router.get('/', async ctx => {
 		return;
 	}
 
-	// get stats
-	const travels = stats == null && await db.all<Travel[]>(
-		` SELECT * FROM travels WHERE domain = $1 AND pathname = $2`,
-		[domain, stats],
-	);
-	if (travels) {
-		console.log(JSON.stringify(travels))
-	}
-
 	// get redirects
-	const redirects = await db.all<Redirect[]>(
-		`SELECT * FROM redirects WHERE domain = $1 AND deletedAt IS NULL ORDER BY createdAt`,
+	const redirects = await db.all<Redirect[]>(`
+		SELECT r.pathname, r.destination, COUNT(t.createdAt) as count FROM redirects r
+		LEFT JOIN travels t 
+			ON r.domain = t.domain AND r.pathname = t.pathname
+		WHERE r.domain = $1 
+			AND r.deletedAt IS NULL 
+		GROUP BY r.pathname, r.destination
+		ORDER BY r.createdAt`,
 		[domain],
 	);
-	console.log('redirects found for ' + domain, redirects.map(r => r.pathname), hasCertificate(domain));
-	ctx.body = render('main', { redirects, domain, travels, stats, isValid: hasCertificate(domain) });
+	console.log(redirects, { domain })
+	ctx.body = render(
+		'main',
+		{ redirects: redirects, domain, isValid: hasCertificate(domain) }
+	);
 });
 
 router.post('/', async ctx => {

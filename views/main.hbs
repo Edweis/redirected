@@ -30,7 +30,7 @@
                 value="{{ domain }}"
                 autofocus="true"
                 hx-get="/"
-                hx-trigger="input delay:300ms, search, blur"
+                hx-trigger="input delay:300ms, search"
                 hx-target="#list"
                 hx-select="#list"
                 hx-push-url="true"
@@ -56,14 +56,14 @@
             <p>Create as many redirections as you&apos;d like.</p>
           </div>
           <div class="grid gap-8">
-            <div id="list" class="grid gap-8">
+            <div id="list" class="grid gap-4">
               {{#block redirects}}
               {{#each redirects}}
               <article class="line grid gap-2">
                 <div class="flex items-center gap-2">
                   From:
                   <p class="grow text-gray-500">
-                    <span class="hidden:sm:show">https://{{ domain }}</span
+                    <span class="hidden:sm:show">https://{{ ../domain }}</span
                     >/{{ this.pathname }}
                   </p>
                   <button
@@ -74,18 +74,6 @@
                     class="icon"
                   >
                     <i class="fa-solid fa-link"></i>
-                  </button>
-                  <button
-                    type="button"
-                    class="icon"
-                    title="Statistics"
-                    tabindex="-1"
-                    hx-push-url="true"
-                    hx-get="/?domain={{ domain }}&stats={{ this.pathname }}"
-                    hx-target="closest article"
-                    hx-swap="outerHTML"
-                  >
-                    <i class="fa-solid fa-chart-simple" aria-hidden="true"></i>
                   </button>
                   <button
                     type="button"
@@ -102,12 +90,13 @@
                 <div class="flex items-center gap-2">
                   To:
                   <p class="text-gray-500 w-full">https://{{ this.destination }}</p>
+                  <span class="whitespace-nowrap">Opened: {{ this.count }}</span>
                 </div>
-                <p class="out">XX</p>
               </article>
               {{/each}}
               {{/block}}
             </div>
+            <hr class="border-1 border-yellow-500 rounded-full mx-12" />
             <form
               hx-post="/"
               hx-target="#list"

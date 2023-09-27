@@ -6,27 +6,32 @@ import { copy } from 'esbuild-plugin-copy';
 const isWatch = process.argv.includes('--watch');
 
 const NODE_ENV = isWatch ? 'development' : 'production';
-
 const context = await esbuild.context({
 	outdir: 'dist',
 	target: 'node18',
 	platform: 'node',
 	format: 'esm',
 	bundle: true,
-	entryPoints: ['src/**/*.ts', 'src/**/*.hbs', 'src/public/styles.css', 'src/redirected.app.conf'],
+	entryPoints: ['src/**/*.ts', 'src/public/styles.css', 'src/redirected.app.conf'],
 	external: [
 		'sequelize', 'mongoose', 'redis', 'mock-aws-s3', 'aws-sdk', 'nock', // some lib were badly written, we have to exclude these
 		'sqlite3' // SQLlite 3 needs to be installed on the server !
 	],
-	loader: { '.html': 'copy', '.hbs': 'copy', '.conf': 'copy' }, // Copy the HTML file to the output
+	loader: { '.html': 'copy', '.conf': 'copy' }, // Copy the HTML file to the output
 	plugins: [
 		postCssPlugin(),
 		copy({
 			copyOnStart: true,
 			resolveFrom: 'cwd',
-			assets: { from: ['src/public/*'], to: ['dist/public'] },
-		},
-		),
+			assets: { from: ['src/public/*'], to: ['dist/public'], },
+		}),
+		copy({
+			resolveFrom: 'cwd',
+			assets: [
+				{ from: ['views/*'], to: 'dist/views' },
+				{ from: ['dist/index.js'], to: ['dist/index.mjs'], }, // We copy the file in mjs to run it with pm2
+			]
+		}),
 	],
 	banner: {
 		// Fix require import in ESM, @see https://github.com/evanw/esbuild/issues/1921#issuecomment-1403107887

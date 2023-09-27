@@ -1,30 +1,29 @@
 import fs from 'node:fs';
 import Handlebars from 'handlebars';
+import { projectRoot } from '../lib/helpers.js';
 
 function loadPartial() {
 	// @ts-expect-error
 	Handlebars.partials = {}; // Clear partials for DEV
-	const views = fs.readdirSync('src/views');
+	const views = fs.readdirSync(projectRoot() + '/views');
 	for (const view of views) {
-		const file = fs.readFileSync('src/views/' + view);
+		const file = fs.readFileSync(projectRoot() + '/views/' + view);
 		Handlebars.registerPartial(view, file.toString());
-		console.log('Registered', view);
 	}
-	// Handlebars.registerHelper('block', (params, template) => {
-	// 	console.log(params, template.fn(params))
-	// 	return template.fn(params)
-	// });
 	Handlebars.registerHelper('block', function (context, options) {
+		// @ts-expect-error
 		return options.fn(this);
 	});
 }
 
+loadPartial();
+
 const matchBlock = (name: string) => new RegExp(`{{#block ${name}}}\n*([\\s\\S]*?)\s*{{\/block}}`, 'g')
 export function render(template: string, parameters?: Record<string, any>) {
 	const [fileName, block] = template.split('?');
-	let file = fs.readFileSync('src/views/' + fileName + '.hbs').toString()
+	let file = fs.readFileSync(projectRoot() + '/views/' + fileName + '.hbs').toString()
+
 	if (block) file = matchBlock(block).exec(file)?.[1] as string
 	if (file == null) throw Error('File not found ' + template)
-	loadPartial(); // set here for hot reload
 	return Handlebars.compile(file)(parameters);
 }

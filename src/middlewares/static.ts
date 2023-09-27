@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import {type Middleware} from '../lib/types.js';
-import {projectRoot} from '../lib/helpers.js';
+import { type Middleware } from '../lib/types.js';
+import { projectRoot } from '../lib/helpers.js';
 
 const EXTS = new Map([
 	['html', 'html'],
@@ -11,7 +11,8 @@ const EXTS = new Map([
 	['png', 'image/png'],
 	['webmanifest', 'text'],
 ]);
-// Robot.txt
+
+// serve static assets for dev
 export const staticAssets: Middleware = async (ctx, next) => {
 	const [, fileName, ext] = /\/public\/([\w\-]+\.(\w+))/.exec(ctx.path) || [];
 	if (!EXTS.has(ext)) {
@@ -23,26 +24,3 @@ export const staticAssets: Middleware = async (ctx, next) => {
 	ctx.type = EXTS.get(ext)!;
 };
 
-// Certificates
-export const wellKnownForCerts: Middleware = async (ctx, next) => {
-	const file = /^\/\.well-known\/(.+)$/.exec(ctx.path)?.[1];
-	if (file == null) {
-		return next();
-	}
-
-	if (file.includes('..')) {
-		return next();
-	}
-
-	if (file.endsWith('/')) {
-		return next();
-	}
-
-	const wellKnownPath = path.join(projectRoot(), 'src/.well-known/' + file);
-	const exists = fs.existsSync(wellKnownPath);
-	console.log('Looking for', {file, wellKnownPath, exists});
-	if (exists) {
-		ctx.type = 'html';
-		ctx.body = fs.createReadStream(wellKnownPath);
-	}
-};
