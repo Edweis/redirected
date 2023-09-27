@@ -11,12 +11,15 @@ export const getCname = mem(
 );
 export const hasCertificate = (domain: string) => fs.existsSync(`${certPath}/${domain}/fullchain.pem`);
 export const createCertificate = async (domain: string) => execPromise(`
-  certbot certonly --webroot --agree-tos -n \
+  sudo certbot certonly --nginx --agree-tos -n \
     --work-dir        /var/www/redirected/certs \
     --config-dir      /var/www/redirected/certs \
     --logs-dir        /var/www/redirected/certs \
     --webroot-path    /var/www/redirected/app/ \
     -d ${domain}  \
-    -m dns@redirected.app --no-eff-email`,
+    -m dns@redirected.app --no-eff-email;
+
+  sudo chown www-data:www-data -R /var/www/redirected/certs;
+    `,
 );
 

@@ -54,7 +54,7 @@ router.post('/', async ctx => {
         deletedAt = NULL;`,
 		[domain, pathname, destination],
 	);
-	ctx.body = render('main?redirects', { redirects: [{ domain, pathname, destination }] });
+	ctx.body = render('main?redirects', { domain, redirects: [{ domain, pathname, destination, count: 0 }] });
 });
 
 router.delete('/', async ctx => {

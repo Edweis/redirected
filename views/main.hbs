@@ -101,7 +101,7 @@
             <form
               hx-post="/"
               hx-target="#list"
-              hx-swap="beforeend"
+              hx-swap="afterbegin"
               hx-include="[name='domain']"
               class="grid gap-2"
             >
@@ -149,7 +149,7 @@
           </div>
           <div class="flex flex-col gap-2">
             <div>
-              <p>Add CNAME record in your DNS<br /></p>
+              <p id="instr" hx-swap-oob="true">Add CNAME record from {{ domain }} to redirected.app<br /></p>
               <p class="hidden">
                 from
                 <span class="link" data-domain>link.domain.com</span>
@@ -166,10 +166,10 @@
             >
               <i class="fa-regular fa-eye"></i>
               Check DNS
-              <span class="htmx-indicator">...</span>
+              <span class="htmx-indicator"> - loading ...</span>
             </button>
             {{#block dns-res}}
-            <p id="dns-message" hx-swap-oob="true">{{ dns.message }}</p>
+            <p id="dns-message" hx-swap-oob="true {{#if dns.message}}hidden{{/if}}">{{ dns.message }}</p>
             {{/block}}
           </div>
         </section>

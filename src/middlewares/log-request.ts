@@ -7,22 +7,9 @@ export const logRequest: Middleware = async (ctx, next) => {
 	await next();
 	console.log(`< ${ctx.status || 404} ${ctx.method} ${ctx.path}`);
 
-	if (!ctx.secure) {
-		return;
-	} // Not logging HTTP, only HTTPS
-
-	if (ctx.method === 'OPTIONS') {
-		return;
-	}
-
-	const isStaticAsset = /\.\w{2,}$/.test(ctx.originalUrl);
-	console.log({ isStaticAsset }, ctx.hostname, ctx.method);
-	if ((ctx.hostname === 'redirected.app' || ctx.hostname === 'localhost') && (ctx.method !== 'GET' || isStaticAsset)) {
-		return;
-	}
+	if (ctx.method === 'OPTIONS') return;
 
 	console.log('saving ...');
-
 	const ua = new UAParser(ctx.req.headers['user-agent']);
 	void db.run(
 		`INSERT INTO travels ( domain, pathname, createdAt, ip, method, referrer, userAgent, userAgentBrowser, userAgentOs, userAgentDevice, status, redirectedTo ) 

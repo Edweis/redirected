@@ -6,3 +6,6 @@ document.addEventListener('click', e => {
 		navigator.clipboard.writeText(value);
 	}
 }, false);
+document
+	.querySelector('[name=destination]')
+	.addEventListener('input', e => e.target.value = e.target.value.replace(/^http?s:\/\//, ''));
