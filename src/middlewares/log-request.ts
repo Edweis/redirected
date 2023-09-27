@@ -9,7 +9,7 @@ export const logRequest: Middleware = async (ctx, next) => {
 
 	if (ctx.method === 'OPTIONS') return;
 	if (ctx.request.host === 'redirected.app' && ctx.path !== '/') return // we don't internal HTTP calls
-	console.log('saving ...');
+
 	const ua = new UAParser(ctx.req.headers['user-agent']);
 	void db.run(
 		`INSERT INTO travels ( domain, pathname, createdAt, ip, method, referrer, userAgent, userAgentBrowser, userAgentOs, userAgentDevice, status, redirectedTo ) 

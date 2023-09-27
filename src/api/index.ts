@@ -88,14 +88,7 @@ router.post('/dns', async ctx => {
 	ctx.body = render('main?dns-res', { dns: { message, isValid } })
 });
 
-router.get('/stats', async (ctx, next) => {
-	const statPathFile = projectRoot() + '/../.stats-path';
-	const statPath = await fs.readFile(statPathFile).then(d => d.toString().trim()).catch(() => '/stats');
-
-	if (ctx.path !== statPath || ctx.method !== 'GET') {
-		return next();
-	}
-
+router.get('/stats', async (ctx,) => {
 	const travels = await db.all<Array<{ domain: string; pathname: string; count: number }>>(`
       SELECT domain, pathname, COUNT(status) as count 
       FROM travels
