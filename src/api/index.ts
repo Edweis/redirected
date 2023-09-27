@@ -81,11 +81,11 @@ router.post('/dns', async ctx => {
 	const cnameDomaines = await getCname(domain);
 	console.log('DNS for', { domain, cnameDomaines });
 	const isValid = cnameDomaines.includes('redirected.app');
-	ctx.status = 204;
-	if (isValid && isProd && !hasCertificate(domain)) {
+
+	const message = isValid ? '✅ DNS is set!' : '🤷‍♂️ DNS is not setup for ' + domain
+	if (isValid && isProd && !hasCertificate(domain))
 		await createCertificate(domain);
-		ctx.status = 200;
-	}
+	ctx.body = render('main?dns-res', { dns: { message, isValid } })
 });
 
 router.get('/stats', async (ctx, next) => {

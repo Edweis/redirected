@@ -147,7 +147,7 @@
             <h2>3. DNS Check</h2>
             <p>Check if your DNS is properly configured. It can take a few seconds.</p>
           </div>
-          <div class="grid gap-2">
+          <div class="flex flex-col gap-2">
             <div>
               <p>Add CNAME record in your DNS<br /></p>
               <p class="hidden">
@@ -157,11 +157,20 @@
                 <span class="link">redirected.app</span>
               </p>
             </div>
-            <button class="w-full" hx-post="/dns?domain={{ domain }}">
+            <button
+              id="dns-check"
+              hx-swap-oob="true"
+              class="w-full"
+              hx-post="/dns?domain={{ domain }}"
+              hx-swap="none"
+            >
               <i class="fa-regular fa-eye"></i>
               Check DNS
               <span class="htmx-indicator">...</span>
             </button>
+            {{#block dns-res}}
+            <p id="dns-message" hx-swap-oob="true">{{ dns.message }}</p>
+            {{/block}}
           </div>
         </section>
       </main>
