@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import Handlebars from 'handlebars';
-import { projectRoot } from '../lib/helpers.js';
+import { projectRoot } from './helpers.js';
 
 function loadPartial() {
 	// @ts-expect-error

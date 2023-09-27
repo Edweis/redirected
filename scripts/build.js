@@ -1,6 +1,5 @@
 
 import esbuild from 'esbuild';
-import postCssPlugin from 'esbuild-postcss';
 import { copy } from 'esbuild-plugin-copy';
 
 const isWatch = process.argv.includes('--watch');
@@ -12,14 +11,13 @@ const context = await esbuild.context({
 	platform: 'node',
 	format: 'esm',
 	bundle: true,
-	entryPoints: ['src/**/*.ts', 'src/public/styles.css', 'src/redirected.app.conf'],
+	entryPoints: ['src/**/*.ts', 'src/redirected.app.conf'],
 	external: [
 		'sequelize', 'mongoose', 'redis', 'mock-aws-s3', 'aws-sdk', 'nock', // some lib were badly written, we have to exclude these
 		'sqlite3' // SQLlite 3 needs to be installed on the server !
 	],
 	loader: { '.html': 'copy', '.conf': 'copy' }, // Copy the HTML file to the output
 	plugins: [
-		postCssPlugin(),
 		copy({
 			copyOnStart: true,
 			resolveFrom: 'cwd',

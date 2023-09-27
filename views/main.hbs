@@ -67,20 +67,19 @@
                     >/{{ this.pathname }}
                   </p>
                   <button
-                    data-copy="https://{{ domain }}/{{ this.pathname }}"
+                    data-copy="https://{{ ../domain }}/{{ this.pathname }}"
                     type="button"
                     title="Copy link to clipboard"
-                    tabindex="-1"
-                    class="icon"
+                    class="icon bg-green"
+                    aria-pressed="false"
                   >
                     <i class="fa-solid fa-link"></i>
                   </button>
                   <button
                     type="button"
                     title="Delete redirection"
-                    tabindex="-1"
                     class="icon"
-                    hx-delete="/?domain={{ domain }}&pathname={{ this.pathname }}"
+                    hx-delete="/?domain={{ ../domain }}&pathname={{ this.pathname }}"
                     hx-swap="delete"
                     hx-target="closest .line"
                   >
@@ -95,8 +94,10 @@
               </article>
               {{/each}}
               {{/block}}
+              {{#if redirects.length}}
+              <hr class="border-1 border-yellow-500 rounded-full mx-12 mt-4" />
+              {{/if}}
             </div>
-            <hr class="border-1 border-yellow-500 rounded-full mx-12" />
             <form
               hx-post="/"
               hx-target="#list"
@@ -125,7 +126,7 @@
                 </label>
               </div>
               {{#if domain}}
-              <button hx-swap-oob="true" id="add-button" class="w-full">
+              <button hx-swap-oob="true" id="add-button" class="w-full" tabindex="4">
                 <i class="fa-solid fa-plus"></i>
                 Add redirection
               </button>
@@ -186,8 +187,6 @@
       </footer>
     </div>
 
-    {{!--
     <script src="/public/script.js"></script>
-    --}}
   </body>
 </html>

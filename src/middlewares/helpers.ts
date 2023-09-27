@@ -2,7 +2,7 @@ import { exec } from 'node:child_process';
 import parse from 'co-body';
 import { RateLimit } from 'koa2-ratelimit';
 import { db } from '../lib/database.js';
-import { type Middleware } from '../lib/types.js';
+import { type Middleware } from './types.js';
 
 export const initDb = async () => {
 	await db.exec(`CREATE TABLE IF NOT EXISTS redirects (

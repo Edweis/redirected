@@ -1,7 +1,7 @@
 import fs from 'node:fs/promises';
 import Router from '@koa/router';
 import { type Redirect, db } from '../lib/database.js';
-import { render } from '../middlewares/render.js';
+import { render } from '../lib/render.js';
 import { projectRoot } from '../lib/helpers.js';
 import { createCertificate, getCname, hasCertificate } from './dns.js';
 

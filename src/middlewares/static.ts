@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { type Middleware } from '../lib/types.js';
+import { type Middleware } from './types.js';
 import { projectRoot } from '../lib/helpers.js';
 
 const EXTS = new Map([

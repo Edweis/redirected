@@ -1,5 +1,5 @@
 import { UAParser } from 'ua-parser-js';
-import { type Middleware } from '../lib/types.js';
+import { type Middleware } from './types.js';
 import { db } from '../lib/database.js';
 
 export const logRequest: Middleware = async (ctx, next) => {
