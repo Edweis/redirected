@@ -6,7 +6,7 @@ import { projectRoot } from '../lib/helpers.js';
 import { createCertificate, getCname, hasCertificate } from './dns.js';
 
 const isProd = process.env.NODE_ENV === 'production';
-const DISABLE_OUR_REDIRECT = false;
+const DISABLE_OUR_REDIRECT = true;
 const router = new Router();
 const SUB_DOMAIN_REGEX
 	= /^(?:[\dA-Za-z](?:[\dA-Za-z-]{0,61}[\dA-Za-z])?\.)+[A-Za-z]{2,7}$/;
@@ -26,14 +26,14 @@ router.get('/', async ctx => {
 	const redirects = await db.all<Redirect[]>(`
 		SELECT r.pathname, r.destination, COUNT(t.createdAt) as count FROM redirects r
 		LEFT JOIN travels t 
-			ON r.domain = t.domain AND r.pathname = t.pathname
+			ON r.domain = t.domain AND t.pathname = '/' || r.pathname
 		WHERE r.domain = $1 
 			AND r.deletedAt IS NULL 
 		GROUP BY r.pathname, r.destination
 		ORDER BY r.createdAt`,
 		[domain],
 	);
-	console.log(redirects, { domain })
+	console.log(redirects, { domain }, await db.all(`SELECT * FROM travels WHERE domain = $1`, [domain]))
 	ctx.body = render(
 		'main',
 		{ redirects: redirects, domain, isValid: hasCertificate(domain) }
