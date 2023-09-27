@@ -8,7 +8,7 @@ export const logRequest: Middleware = async (ctx, next) => {
 	console.log(`< ${ctx.status || 404} ${ctx.method} ${ctx.path}`);
 
 	if (ctx.method === 'OPTIONS') return;
-
+	if (ctx.request.host === 'redirected.app' && ctx.path !== '/') return // we don't internal HTTP calls
 	console.log('saving ...');
 	const ua = new UAParser(ctx.req.headers['user-agent']);
 	void db.run(
